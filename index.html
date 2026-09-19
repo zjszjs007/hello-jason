@@ -1113,6 +1113,160 @@ h2.section-title {
 }
 
 /* ============================================================
+   TECH-STACK 3D CUBE
+   ============================================================ */
+.tech-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 24px 20px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  align-self: stretch;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+:root[data-theme="dark"] .tech-stack {
+  background: #17171F;
+  border-color: #2C2C38;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.24);
+}
+.tech-stack-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.tech-stack-title {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.tech-stack-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+:root[data-theme="dark"] .tech-stack-hint { color: #7A7A86; }
+
+.tech-stack-scene {
+  width: 100%;
+  height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 900px;
+  perspective-origin: 50% 50%;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background:
+    radial-gradient(ellipse at center, rgba(91, 91, 214, 0.06) 0%, transparent 60%),
+    linear-gradient(180deg, var(--surface-alt) 0%, var(--bg) 100%);
+  cursor: grab;
+  user-select: none;
+  outline: none;
+}
+.tech-stack-scene:focus-visible {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.tech-stack-scene:active { cursor: grabbing; }
+:root[data-theme="dark"] .tech-stack-scene {
+  background:
+    radial-gradient(ellipse at center, rgba(139, 139, 232, 0.10) 0%, transparent 60%),
+    linear-gradient(180deg, #1F1F2A 0%, #101015 100%);
+}
+
+.cube {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  transform-style: preserve-3d;
+  transform: rotateX(-20deg) rotateY(30deg);
+  transition: transform 0.08s linear, filter 0.2s ease;
+  will-change: transform;
+}
+.cube.face-hover { filter: brightness(1.05); }
+
+.face {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1.5px solid rgba(91, 91, 214, 0.35);
+  border-radius: 12px;
+  box-shadow:
+    0 0 24px rgba(91, 91, 214, 0.18),
+    inset 0 0 24px rgba(91, 91, 214, 0.06);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+:root[data-theme="dark"] .face {
+  background: rgba(23, 23, 31, 0.92);
+  border-color: rgba(139, 139, 232, 0.42);
+  box-shadow:
+    0 0 28px rgba(139, 139, 232, 0.24),
+    inset 0 0 24px rgba(139, 139, 232, 0.08);
+}
+.face span {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  text-align: center;
+  padding: 0 8px;
+}
+:root[data-theme="dark"] .face span { color: #A8A8F0; }
+
+.face-front  { transform: translateZ(80px); }
+.face-back   { transform: rotateY(180deg) translateZ(80px); }
+.face-right  { transform: rotateY(90deg) translateZ(80px); }
+.face-left   { transform: rotateY(-90deg) translateZ(80px); }
+.face-top    { transform: rotateX(90deg) translateZ(80px); }
+.face-bottom { transform: rotateX(-90deg) translateZ(80px); }
+
+.tech-stack-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+.tech-stack-legend span {
+  padding: 4px 10px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid transparent;
+  border-radius: 100px;
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 500;
+}
+:root[data-theme="dark"] .tech-stack-legend span {
+  background: rgba(139, 139, 232, 0.14);
+  color: #A8A8F0;
+}
+
+@media (max-width: 640px) {
+  .tech-stack-scene { height: 260px; }
+  .cube { width: 120px; height: 120px; }
+  .face { width: 120px; height: 120px; }
+  .face-front  { transform: translateZ(60px); }
+  .face-back   { transform: rotateY(180deg) translateZ(60px); }
+  .face-right  { transform: rotateY(90deg) translateZ(60px); }
+  .face-left   { transform: rotateY(-90deg) translateZ(60px); }
+  .face-top    { transform: rotateX(90deg) translateZ(60px); }
+  .face-bottom { transform: rotateX(-90deg) translateZ(60px); }
+  .face span { font-size: 12px; }
+}
+
+/* ============================================================
    COLOPHON MODAL (隐藏入口：点击 footer 版权行触发)
    ============================================================ */
 .colophon-badge {
@@ -1904,42 +2058,26 @@ body.colophon-open { overflow: hidden; }
           <span class="tag" data-i18n="ct.tag4">设计</span>
         </div>
       </div>
-      <!--
-        接入 Formspree / Web3Forms 的方式（推荐）：
-        1. 注册 https://formspree.io 得到 endpoint URL，例如 https://formspree.io/f/abc12345
-        2. 把下面这个 form 改成：
-           <form class="contact-form reveal" id="contactForm" action="https://formspree.io/f/abc12345" method="POST">
-        3. 删除 JS 里 CONTACT FORM 那段的防默认逻辑（让浏览器自然 POST）
-        4. 把下面这个 data-not-connected 属性删掉，并删除 .form-note 那段说明
-      -->
-      <div class="form-card reveal">
-        <form class="contact-form" id="contactForm" novalidate data-not-connected>
-          <div class="form-row">
-            <div class="form-field">
-              <label for="name" data-i18n="ct.fName">姓名</label>
-              <input type="text" id="name" name="name" data-i18n-ph="ct.phName" placeholder="你的称呼" required />
-            </div>
-            <div class="form-field">
-              <label for="email" data-i18n="ct.fEmail">邮箱</label>
-              <input type="email" id="email" name="email" placeholder="you@example.com" required />
-            </div>
+      <!-- Tech-stack 3D cube (replaces the disabled placeholder form) -->
+      <div class="tech-stack reveal" aria-labelledby="techStackTitle">
+        <div class="tech-stack-header">
+          <div class="tech-stack-title" id="techStackTitle" data-i18n="ct.stackTitle">技术栈</div>
+          <div class="tech-stack-hint" data-i18n="ct.stackHint">移动鼠标改变视角 · 滚轮缩放</div>
+        </div>
+        <div class="tech-stack-scene" id="techStackScene" tabindex="0" role="img" aria-label="Interactive 3D tech-stack cube">
+          <div class="cube" id="techCube">
+            <div class="face face-front"><span>TypeScript</span></div>
+            <div class="face face-back"><span>Solidity</span></div>
+            <div class="face face-right"><span>React</span></div>
+            <div class="face face-left"><span>Node.js</span></div>
+            <div class="face face-top"><span>Tailwind CSS</span></div>
+            <div class="face face-bottom"><span>Web3 / EVM</span></div>
           </div>
-          <div class="form-field">
-            <label for="subject" data-i18n="ct.fSubject">主题</label>
-            <input type="text" id="subject" name="subject" data-i18n-ph="ct.phSubject" placeholder="想聊什么？" />
-          </div>
-          <div class="form-field">
-            <label for="message" data-i18n="ct.fMessage">留言</label>
-            <textarea id="message" name="message" data-i18n-ph="ct.phMessage" placeholder="写点什么…" required></textarea>
-          </div>
-          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-            <span data-i18n="ct.submit">发送留言</span>
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </button>
-          <div class="form-note" data-i18n="ct.formNote">
-            微信扫码加我更快，也可以直接到 <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a> 给我留言。表单暂未启用。
-          </div>
-        </form>
+        </div>
+        <div class="tech-stack-legend" id="techStackLegend">
+          <span>TypeScript</span><span>React</span><span>Node.js</span>
+          <span>Solidity</span><span>Tailwind CSS</span><span>Web3 / EVM</span>
+        </div>
       </div>
     </div>
   </div>
@@ -1971,7 +2109,7 @@ body.colophon-open { overflow: hidden; }
           </svg>
         </div>
         <h4 data-i18n="col.h4">迭代日志</h4>
-        <p data-i18n="col.p">从空白 <code>index.html</code> 到当前版本，一共经历了 7 次迭代。每一版都解决一个具体的问题，没有一次是"重做"。</p>
+        <p data-i18n="col.p">从空白 <code>index.html</code> 到当前版本，一共经历了 8 次迭代。每一版都解决一个具体的问题，没有一次是"重做"。</p>
         <ol class="colophon-timeline">
           <li>
             <span class="ver">v0.1</span>
@@ -2012,6 +2150,10 @@ body.colophon-open { overflow: hidden; }
           <li>
             <span class="ver">v1.6</span>
             <span class="log" data-i18n="col.v16">加微信 —— 联系区新增微信二维码卡片，中英双语提示</span>
+          </li>
+          <li>
+            <span class="ver">v1.7</span>
+            <span class="log" data-i18n="col.v17">3D 立方体 —— 替换禁用表单为可交互的技术栈立方体（鼠标旋转 / 滚轮缩放 / 自动自转）</span>
           </li>
         </ol>
       </article>
@@ -2185,6 +2327,85 @@ window.addEventListener('load', () => {
       }, 1800);
     }, 600);
   });
+})();
+
+/* ============================================================
+   TECH-STACK 3D CUBE
+   鼠标跟随旋转 + 滚轮缩放 + 自动自转 + reduced-motion 兼容
+   ============================================================ */
+(function () {
+  const scene = document.getElementById('techStackScene');
+  const cube = document.getElementById('techCube');
+  if (!scene || !cube) return;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  // 状态
+  let rotX = -20;
+  let rotY = 30;
+  let targetX = rotX;
+  let targetY = rotY;
+  let zoom = 1;
+  let targetZoom = 1;
+  let isHovering = false;
+  let lastMoveT = 0;
+  let autoDir = 1;
+
+  // 鼠标位置 → 目标旋转
+  scene.addEventListener('mousemove', function (e) {
+    const rect = scene.getBoundingClientRect();
+    // nx, ny 范围 -1..1，中心为 0
+    const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+    targetY = nx * 90;   // 左右各 ±90°
+    targetX = -ny * 60;  // 上下各 ±60°
+    lastMoveT = performance.now();
+  });
+
+  scene.addEventListener('mouseenter', function () {
+    isHovering = true;
+    cube.classList.add('face-hover');
+  });
+  scene.addEventListener('mouseleave', function () {
+    isHovering = false;
+    cube.classList.remove('face-hover');
+    // 缓回到默认视角
+    targetX = -20;
+    targetY = 30;
+  });
+
+  // 滚轮缩放
+  scene.addEventListener('wheel', function (e) {
+    e.preventDefault();
+    const delta = -Math.sign(e.deltaY) * 0.1;
+    targetZoom = Math.max(0.55, Math.min(1.6, targetZoom + delta));
+    lastMoveT = performance.now();
+  }, { passive: false });
+
+  // 键盘支持：←→↑↓ 调整角度，+/- 缩放
+  scene.addEventListener('keydown', function (e) {
+    const step = e.shiftKey ? 15 : 6;
+    if (e.key === 'ArrowLeft') { targetY -= step; e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { targetY += step; e.preventDefault(); }
+    else if (e.key === 'ArrowUp') { targetX -= step; e.preventDefault(); }
+    else if (e.key === 'ArrowDown') { targetX += step; e.preventDefault(); }
+    else if (e.key === '+' || e.key === '=') { targetZoom = Math.min(1.6, targetZoom + 0.1); e.preventDefault(); }
+    else if (e.key === '-' || e.key === '_') { targetZoom = Math.max(0.55, targetZoom - 0.1); e.preventDefault(); }
+  });
+
+  function loop() {
+    // 空闲 > 2s 缓慢自转
+    const idle = performance.now() - lastMoveT > 2000;
+    if (idle) targetY += autoDir * 0.2;
+    // 缓动
+    rotX += (targetX - rotX) * 0.12;
+    rotY += (targetY - rotY) * 0.12;
+    zoom += (targetZoom - zoom) * 0.14;
+    cube.style.transform = 'rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) scale3d(' + zoom.toFixed(3) + ',' + zoom.toFixed(3) + ',' + zoom.toFixed(3) + ')';
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
 })();
 
 /* ============================================================
@@ -2403,11 +2624,13 @@ window.addEventListener('load', () => {
     'ct.wechatLabel': '微信扫码加我',
     'ct.wechatHint': '搜索微信号或扫码添加',
     'ct.formNote': '微信扫码加我更快，也可以直接到 <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a> 给我留言。表单暂未启用。',
+    'ct.stackTitle': '技术栈',
+    'ct.stackHint': '移动鼠标改变视角 · 滚轮缩放',
     'ft.aria': '查看版本迭代', 'ft.top': '返回顶部',
     'sc.title': '快捷键', 'sc.d': '切换暗色 / 亮色', 'sc.l': '切换中英文',
     'col.title': '版本迭代',
     'col.h4': '迭代日志',
-    'col.p': '从空白 <code>index.html</code> 到当前版本，一共经历了 7 次迭代。每一版都解决一个具体的问题，没有一次是"重做"。',
+    'col.p': '从空白 <code>index.html</code> 到当前版本，一共经历了 8 次迭代。每一版都解决一个具体的问题，没有一次是"重做"。',
     'col.v01': '骨架搭建 —— 6 个区块的 HTML 结构与视觉 token 定稿',
     'col.v03': '交互细节 —— 滚动入场动画、导航当前项高亮、移动端汉堡菜单',
     'col.v05': '无障碍 —— 语义化标签、<code>aria-label</code>、<code>prefers-reduced-motion</code> 关闭动效',
@@ -2418,6 +2641,7 @@ window.addEventListener('load', () => {
     'col.v14': '多语言 —— 中英文切换（快捷键 L），支持 URL 参数与本地持久化',
     'col.v15': '节奏与细节 —— Hero 间距节奏 32 / 24 / 28 / 20 + 联系区卡片化重构',
     'col.v16': '加微信 —— 联系区新增微信二维码卡片，中英双语提示',
+    'col.v17': '3D 立方体 —— 替换禁用表单为可交互的技术栈立方体（鼠标旋转 / 滚轮缩放 / 自动自转）',
     'col.signoff': '—— 每一处克制都是刻意的选择。',
   };
 
@@ -2491,11 +2715,13 @@ window.addEventListener('load', () => {
     'ct.wechatLabel': 'WeChat',
     'ct.wechatHint': 'Scan QR or search to add',
     'ct.formNote': 'Scan the WeChat QR above to add me — fastest. Or leave a message on <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a>. This form is disabled for now.',
+    'ct.stackTitle': 'Tech Stack',
+    'ct.stackHint': 'Move mouse to rotate · Scroll to zoom',
     'ft.aria': 'View version history', 'ft.top': 'Back to top',
     'sc.title': 'Shortcuts', 'sc.d': 'Toggle light / dark', 'sc.l': 'Toggle language',
     'col.title': 'Version history',
     'col.h4': 'Iteration log',
-    'col.p': 'From a blank <code>index.html</code> to this version, seven iterations. Each one solved a specific problem; none were a "redo".',
+    'col.p': 'From a blank <code>index.html</code> to this version, eight iterations. Each one solved a specific problem; none were a "redo".',
     'col.v01': 'Skeleton — 6-section HTML structure &amp; visual tokens locked',
     'col.v03': 'Interaction — scroll-reveal, nav active state, mobile hamburger',
     'col.v05': 'Accessibility — semantic tags, <code>aria-label</code>, <code>prefers-reduced-motion</code>',
@@ -2506,6 +2732,7 @@ window.addEventListener('load', () => {
     'col.v14': 'i18n — zh/en toggle (shortcut L), URL param + localStorage persistence',
     'col.v15': 'Rhythm — Hero spacing rhythm (32/24/28/20) + Contact section card redesign',
     'col.v16': 'WeChat — added QR code card in Contact section with bilingual hints',
+    'col.v17': '3D Cube — replaced the disabled form with an interactive tech-stack cube (mouse rotate / wheel zoom / auto-spin)',
     'col.signoff': '—— Every restraint is a deliberate choice.',
   };
 
