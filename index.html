@@ -432,100 +432,51 @@ h2.section-title {
   width: 100%;
   height: 100%;
   border-radius: var(--radius-xl);
-  background: linear-gradient(135deg, #EEEEFB 0%, #F4E9FB 50%, #E8EEFB 100%);
   border: 1px solid var(--border);
   overflow: hidden;
-  display: grid;
-  place-items: center;
   position: relative;
+  box-shadow: 0 24px 60px rgba(91, 91, 214, 0.18);
+  background: var(--surface);
 }
 :root[data-theme="dark"] .hero-portrait {
-  background: linear-gradient(135deg, #1A1A2E 0%, #252038 50%, #1E2438 100%);
+  box-shadow: 0 24px 60px rgba(139, 139, 240, 0.24);
+  border-color: #2C2C38;
 }
-:root[data-theme="dark"] .hero-portrait::before {
-  background:
-    radial-gradient(circle at 30% 30%, rgba(139, 139, 240, 0.35), transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.3), transparent 50%);
+.hero-portrait-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 20%;
+  display: block;
 }
-.hero-portrait::before {
+.hero-portrait::after {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(circle at 30% 30%, rgba(91, 91, 214, 0.25), transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(139, 92, 246, 0.25), transparent 50%);
+    linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.55) 100%),
+    radial-gradient(circle at 30% 20%, rgba(91, 91, 214, 0.18), transparent 50%);
+  pointer-events: none;
 }
-/* 兜底：任何背景为近白色/浅色 rgba 的元素，在暗色模式下必须显式指定 */
-:root[data-theme="dark"] .nav-cta:hover { background: var(--surface-alt); }
-:root[data-theme="dark"] .icon-moon { fill: #A5A5F5; stroke: #A5A5F5; }
-.hero-portrait-avatar {
-  position: relative;
-  width: 160px;
-  height: 160px;
-  display: grid;
-  place-items: center;
-  filter: drop-shadow(0 20px 40px rgba(91, 91, 214, 0.35));
+:root[data-theme="dark"] .hero-portrait::after {
+  background:
+    linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.65) 100%),
+    radial-gradient(circle at 30% 20%, rgba(139, 139, 240, 0.15), transparent 50%);
 }
-:root[data-theme="dark"] .hero-portrait-avatar {
-  filter: drop-shadow(0 20px 40px rgba(139, 139, 240, 0.4));
-}
-.hero-portrait-avatar svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-.hero-portrait-avatar .halo {
-  animation: halo-spin 40s linear infinite;
-  transform-origin: 50% 50%;
-}
-.hero-portrait-avatar .halo-slow {
-  animation: halo-spin 70s linear infinite reverse;
-  transform-origin: 50% 50%;
-}
-.hero-portrait-avatar .core {
-  animation: core-breathe 6s ease-in-out infinite;
-  transform-origin: 50% 50%;
-}
-@keyframes halo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@keyframes core-breathe {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.06); opacity: 0.92; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .hero-portrait-avatar .halo,
-  .hero-portrait-avatar .halo-slow,
-  .hero-portrait-avatar .core {
-    animation: none;
-  }
-}
-/* 暗色模式：SVG 内的渐变与描边整体提亮（用 CSS 变量驱动） */
-.hero-portrait-avatar {
-  --accent-strong: #5B5BD6;
-  --accent-soft: #8B5CF6;
-}
-:root[data-theme="dark"] .hero-portrait-avatar {
-  --accent-strong: #8B8BF0;
-  --accent-soft: #A78BFA;
-}
-.hero-portrait-avatar .stroke-strong { stroke: var(--accent-strong); }
-.hero-portrait-avatar .stroke-soft   { stroke: var(--accent-soft); }
-.hero-portrait-avatar .fill-strong   { fill: var(--accent-strong); }
-.hero-portrait-avatar .fill-soft     { fill: var(--accent-soft); }
-.hero-portrait-avatar .grad-stop-a   { stop-color: var(--accent-strong); }
-.hero-portrait-avatar .grad-stop-b   { stop-color: var(--accent-soft); }
-.hero-portrait-avatar .halo-stop     { stop-color: var(--accent-strong); stop-opacity: 0.12; }
 .hero-portrait-hint {
   position: absolute;
+  left: 20px;
+  right: 20px;
   bottom: 16px;
-  left: 16px;
-  right: 16px;
-  font-size: 12px;
-  color: var(--text-muted);
+  color: #fff;
   font-family: var(--font-mono);
-  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  z-index: 2;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
 }
 
 /* ============================================================
@@ -1621,62 +1572,8 @@ body.colophon-open { overflow: hidden; }
     </div>
     <div class="hero-visual reveal">
       <div class="hero-portrait">
-        <div class="hero-portrait-avatar" aria-label="抽象个人符号">
-          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
-            <defs>
-              <linearGradient id="grad-core" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" class="grad-stop-a"/>
-                <stop offset="100%" class="grad-stop-b"/>
-              </linearGradient>
-              <radialGradient id="grad-halo" cx="50%" cy="50%" r="50%">
-                <stop offset="60%" stop-color="transparent"/>
-                <stop offset="100%" class="halo-stop"/>
-              </radialGradient>
-            </defs>
-
-            <!-- 背景光晕 -->
-            <circle cx="80" cy="80" r="78" fill="url(#grad-halo)"/>
-
-            <!-- 外圈虚线轨道（旋转） -->
-            <g class="halo">
-              <circle cx="80" cy="80" r="72" fill="none"
-                class="stroke-strong" stroke-width="1"
-                stroke-dasharray="2 6" opacity="0.5"/>
-            </g>
-
-            <!-- 中环细线（反向旋转） -->
-            <g class="halo-slow">
-              <circle cx="80" cy="80" r="58" fill="none"
-                class="stroke-soft" stroke-width="0.8" opacity="0.45"/>
-              <circle cx="80" cy="22" r="3" class="fill-soft" opacity="0.9"/>
-              <circle cx="138" cy="80" r="2" class="fill-strong" opacity="0.7"/>
-              <circle cx="80" cy="138" r="2.5" class="fill-strong" opacity="0.7"/>
-            </g>
-
-            <!-- 内圈实心轨道 -->
-            <circle cx="80" cy="80" r="46" fill="none"
-              class="stroke-strong" stroke-width="1.2" opacity="0.4"/>
-
-            <!-- 核心几何（呼吸） -->
-            <g class="core">
-              <!-- 抽象菱形 -->
-              <path d="M80 46 L110 80 L80 114 L50 80 Z"
-                fill="url(#grad-core)" opacity="0.18"/>
-              <path d="M80 46 L110 80 L80 114 L50 80 Z"
-                fill="none" stroke="url(#grad-core)" stroke-width="1.6"/>
-              <!-- 内嵌小菱形 -->
-              <path d="M80 62 L96 80 L80 98 L64 80 Z"
-                fill="url(#grad-core)" opacity="0.65"/>
-              <!-- 中心圆点 -->
-              <circle cx="80" cy="80" r="3.5" fill="#FFFFFF"/>
-              <!-- 四点装饰 -->
-              <circle cx="80" cy="46" r="2" fill="#FFFFFF" opacity="0.9"/>
-              <circle cx="110" cy="80" r="2" fill="#FFFFFF" opacity="0.9"/>
-              <circle cx="80" cy="114" r="2" fill="#FFFFFF" opacity="0.9"/>
-              <circle cx="50" cy="80" r="2" fill="#FFFFFF" opacity="0.9"/>
-            </g>
-          </svg>
-        </div>
+        <img class="hero-portrait-photo" src="assets/avatar.jpg"
+             alt="Jason Zhang" width="760" height="760" loading="eager" />
         <div class="hero-portrait-hint" data-i18n="hero.portraitHint">独立 · 自由职业 · 天津</div>
       </div>
     </div>
@@ -2021,7 +1918,7 @@ body.colophon-open { overflow: hidden; }
           </li>
           <li>
             <span class="ver">v1.7</span>
-            <span class="log" data-i18n="col.v17">3D 球 —— 替换禁用表单为可交互的技术栈粒子球（拖拽旋转 / 滚轮缩放 / 自动自转），无外框裸置</span>
+            <span class="log" data-i18n="col.v17">照片 &amp; 3D 球 —— 加入真实头像与二维码，替换禁用表单为可交互技术栈粒子球</span>
           </li>
         </ol>
       </article>
@@ -2665,7 +2562,7 @@ window.addEventListener('load', () => {
     'col.v14': '多语言 —— 中英文切换（快捷键 L），支持 URL 参数与本地持久化',
     'col.v15': '节奏与细节 —— Hero 间距节奏 32 / 24 / 28 / 20 + 联系区卡片化重构',
     'col.v16': '加微信 —— 联系区新增微信二维码卡片，中英双语提示',
-    'col.v17': '3D 球 —— 替换禁用表单为可交互的技术栈粒子球（拖拽旋转 / 滚轮缩放 / 自动自转），无外框裸置',
+    'col.v17': '照片 & 3D 球 —— 加入真实头像与二维码，替换禁用表单为可交互技术栈粒子球',
     'col.signoff': '—— 每一处克制都是刻意的选择。',
   };
 
@@ -2754,7 +2651,7 @@ window.addEventListener('load', () => {
     'col.v14': 'i18n — zh/en toggle (shortcut L), URL param + localStorage persistence',
     'col.v15': 'Rhythm — Hero spacing rhythm (32/24/28/20) + Contact section card redesign',
     'col.v16': 'WeChat — added QR code card in Contact section with bilingual hints',
-    'col.v17': '3D Sphere — replaced the disabled form with an interactive tech-stack particle sphere (drag rotate / wheel zoom / auto-spin), framed as bare canvas',
+    'col.v17': 'Photos & 3D Sphere — real avatar & WeChat QR added; disabled form replaced with interactive tech-stack particle sphere',
     'col.signoff': '—— Every restraint is a deliberate choice.',
   };
 
