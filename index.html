@@ -1158,14 +1158,11 @@ h2.section-title {
   display: flex;
   align-items: center;
   justify-content: center;
-  perspective: 900px;
-  perspective-origin: 50% 50%;
   position: relative;
   overflow: hidden;
   border-radius: var(--radius-sm);
   background:
-    radial-gradient(ellipse at center, rgba(91, 91, 214, 0.06) 0%, transparent 60%),
-    linear-gradient(180deg, var(--surface-alt) 0%, var(--bg) 100%);
+    radial-gradient(ellipse at center, rgba(91, 91, 214, 0.05) 0%, transparent 55%);
   cursor: grab;
   user-select: none;
   outline: none;
@@ -1176,61 +1173,14 @@ h2.section-title {
 .tech-stack-scene:active { cursor: grabbing; }
 :root[data-theme="dark"] .tech-stack-scene {
   background:
-    radial-gradient(ellipse at center, rgba(139, 139, 232, 0.10) 0%, transparent 60%),
-    linear-gradient(180deg, #1F1F2A 0%, #101015 100%);
+    radial-gradient(ellipse at center, rgba(139, 139, 232, 0.08) 0%, transparent 55%);
 }
 
-.cube {
-  position: relative;
-  width: 160px;
-  height: 160px;
-  transform-style: preserve-3d;
-  transform: rotateX(-20deg) rotateY(30deg);
-  transition: transform 0.08s linear, filter 0.2s ease;
-  will-change: transform;
+.tech-stack-scene canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
-.cube.face-hover { filter: brightness(1.05); }
-
-.face {
-  position: absolute;
-  width: 160px;
-  height: 160px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1.5px solid rgba(91, 91, 214, 0.35);
-  border-radius: 12px;
-  box-shadow:
-    0 0 24px rgba(91, 91, 214, 0.18),
-    inset 0 0 24px rgba(91, 91, 214, 0.06);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-}
-:root[data-theme="dark"] .face {
-  background: rgba(23, 23, 31, 0.92);
-  border-color: rgba(139, 139, 232, 0.42);
-  box-shadow:
-    0 0 28px rgba(139, 139, 232, 0.24),
-    inset 0 0 24px rgba(139, 139, 232, 0.08);
-}
-.face span {
-  font-family: var(--font-mono);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: var(--accent);
-  text-align: center;
-  padding: 0 8px;
-}
-:root[data-theme="dark"] .face span { color: #A8A8F0; }
-
-.face-front  { transform: translateZ(80px); }
-.face-back   { transform: rotateY(180deg) translateZ(80px); }
-.face-right  { transform: rotateY(90deg) translateZ(80px); }
-.face-left   { transform: rotateY(-90deg) translateZ(80px); }
-.face-top    { transform: rotateX(90deg) translateZ(80px); }
-.face-bottom { transform: rotateX(-90deg) translateZ(80px); }
 
 .tech-stack-legend {
   display: flex;
@@ -1255,15 +1205,7 @@ h2.section-title {
 
 @media (max-width: 640px) {
   .tech-stack-scene { height: 260px; }
-  .cube { width: 120px; height: 120px; }
-  .face { width: 120px; height: 120px; }
-  .face-front  { transform: translateZ(60px); }
-  .face-back   { transform: rotateY(180deg) translateZ(60px); }
-  .face-right  { transform: rotateY(90deg) translateZ(60px); }
-  .face-left   { transform: rotateY(-90deg) translateZ(60px); }
-  .face-top    { transform: rotateX(90deg) translateZ(60px); }
-  .face-bottom { transform: rotateX(-90deg) translateZ(60px); }
-  .face span { font-size: 12px; }
+  .tech-stack-legend span { font-size: 10px; }
 }
 
 /* ============================================================
@@ -2062,17 +2004,10 @@ body.colophon-open { overflow: hidden; }
       <div class="tech-stack reveal" aria-labelledby="techStackTitle">
         <div class="tech-stack-header">
           <div class="tech-stack-title" id="techStackTitle" data-i18n="ct.stackTitle">技术栈</div>
-          <div class="tech-stack-hint" data-i18n="ct.stackHint">移动鼠标改变视角 · 滚轮缩放</div>
+          <div class="tech-stack-hint" data-i18n="ct.stackHint">拖拽旋转 · 滚轮缩放</div>
         </div>
-        <div class="tech-stack-scene" id="techStackScene" tabindex="0" role="img" aria-label="Interactive 3D tech-stack cube">
-          <div class="cube" id="techCube">
-            <div class="face face-front"><span>TypeScript</span></div>
-            <div class="face face-back"><span>Solidity</span></div>
-            <div class="face face-right"><span>React</span></div>
-            <div class="face face-left"><span>Node.js</span></div>
-            <div class="face face-top"><span>Tailwind CSS</span></div>
-            <div class="face face-bottom"><span>Web3 / EVM</span></div>
-          </div>
+        <div class="tech-stack-scene" id="techStackScene" tabindex="0" role="img" aria-label="Interactive 3D tech-stack sphere: TypeScript, React, Node.js, Solidity, Tailwind CSS, Web3, EVM">
+          <canvas id="techSphere" aria-hidden="true"></canvas>
         </div>
         <div class="tech-stack-legend" id="techStackLegend">
           <span>TypeScript</span><span>React</span><span>Node.js</span>
@@ -2153,7 +2088,7 @@ body.colophon-open { overflow: hidden; }
           </li>
           <li>
             <span class="ver">v1.7</span>
-            <span class="log" data-i18n="col.v17">3D 立方体 —— 替换禁用表单为可交互的技术栈立方体（鼠标旋转 / 滚轮缩放 / 自动自转）</span>
+            <span class="log" data-i18n="col.v17">3D 球 —— 替换禁用表单为可交互的技术栈旋转球（拖拽旋转 / 滚轮缩放 / 自动自转）</span>
           </li>
         </ol>
       </article>
@@ -2330,82 +2265,240 @@ window.addEventListener('load', () => {
 })();
 
 /* ============================================================
-   TECH-STACK 3D CUBE
-   鼠标跟随旋转 + 滚轮缩放 + 自动自转 + reduced-motion 兼容
+   TECH-STACK 3D SPHERE (Canvas 2D + 3D math)
+   文字粒子球：Fibonacci 分布 + Y 轴旋转 + 透视投影
+   鼠标横向拖拽调整旋转角，滚轮缩放，reduced-motion 静态
    ============================================================ */
 (function () {
   const scene = document.getElementById('techStackScene');
-  const cube = document.getElementById('techCube');
-  if (!scene || !cube) return;
+  const canvas = document.getElementById('techSphere');
+  if (!scene || !canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce) return;
+  const darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
-  // 状态
-  let rotX = -20;
-  let rotY = 30;
-  let targetX = rotX;
-  let targetY = rotY;
-  let zoom = 1;
-  let targetZoom = 1;
-  let isHovering = false;
-  let lastMoveT = 0;
-  let autoDir = 1;
+  // 技术栈文字池（重复几次填充球面）
+  const TECH = [
+    'TypeScript', 'React', 'Node.js', 'Solidity',
+    'Tailwind', 'Web3', 'EVM', 'JavaScript',
+    'Python', 'Go', 'Rust', 'Docker',
+    'Kubernetes', 'PostgreSQL', 'Redis', 'GraphQL',
+    'Next.js', 'Vite', 'WebAssembly', 'Git',
+    'Linux', 'AWS', 'Figma', 'WebSocket',
+    'REST', 'JWT', 'WebAuthn', 'Ethereum'
+  ];
 
-  // 鼠标位置 → 目标旋转
-  scene.addEventListener('mousemove', function (e) {
+  // Fibonacci 球面分布
+  function fibonacciSphere(n) {
+    const pts = [];
+    const phi = Math.PI * (3 - Math.sqrt(5)); // golden angle
+    for (let i = 0; i < n; i++) {
+      const y = 1 - (i / (n - 1)) * 2;  // -1..1
+      const r = Math.sqrt(1 - y * y);
+      const theta = phi * i;
+      pts.push({
+        x: Math.cos(theta) * r,
+        y: y,
+        z: Math.sin(theta) * r
+      });
+    }
+    return pts;
+  }
+
+  // 生成粒子：每个粒子挂在球面某个方向上
+  const N = TECH.length;
+  const base = fibonacciSphere(N);
+  const particles = base.map((p, i) => ({
+    dx: p.x, dy: p.y, dz: p.z,
+    text: TECH[i]
+  }));
+
+  // 尺寸 & DPR
+  let W = 0, H = 0, dpr = 1;
+  function resize() {
     const rect = scene.getBoundingClientRect();
-    // nx, ny 范围 -1..1，中心为 0
-    const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-    targetY = nx * 90;   // 左右各 ±90°
-    targetX = -ny * 60;  // 上下各 ±60°
-    lastMoveT = performance.now();
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = rect.width;
+    H = rect.height;
+    canvas.width = Math.max(1, Math.floor(W * dpr));
+    canvas.height = Math.max(1, Math.floor(H * dpr));
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // 交互状态
+  let rotY = 0.6;         // Y 轴主旋转角
+  let rotX = -0.28;       // X 轴轻微倾角
+  let targetRotY = rotY;
+  let targetRotX = rotX;
+  let autoSpin = 0.006;   // 默认自转角速度（rad/frame）
+  let dragging = false;
+  let dragStartX = 0, dragStartY = 0;
+  let dragStartRotY = 0, dragStartRotX = 0;
+  let scale = 1;
+  let targetScale = 1;
+  let lastInteractT = 0;
+
+  // 鼠标拖拽（左键按住 → 手动旋转）
+  scene.addEventListener('mousedown', function (e) {
+    dragging = true;
+    dragStartX = e.clientX;
+    dragStartY = e.clientY;
+    dragStartRotY = targetRotY;
+    dragStartRotX = targetRotX;
+    lastInteractT = performance.now();
+  });
+  window.addEventListener('mouseup', function () { dragging = false; });
+  window.addEventListener('mousemove', function (e) {
+    if (!dragging) return;
+    targetRotY = dragStartRotY + (e.clientX - dragStartX) * 0.008;
+    targetRotX = dragStartRotX + (e.clientY - dragStartY) * 0.005;
+    targetRotX = Math.max(-1.1, Math.min(1.1, targetRotX));
+    lastInteractT = performance.now();
   });
 
-  scene.addEventListener('mouseenter', function () {
-    isHovering = true;
-    cube.classList.add('face-hover');
-  });
-  scene.addEventListener('mouseleave', function () {
-    isHovering = false;
-    cube.classList.remove('face-hover');
-    // 缓回到默认视角
-    targetX = -20;
-    targetY = 30;
-  });
+  // 触摸支持
+  scene.addEventListener('touchstart', function (e) {
+    if (e.touches.length !== 1) return;
+    dragging = true;
+    dragStartX = e.touches[0].clientX;
+    dragStartY = e.touches[0].clientY;
+    dragStartRotY = targetRotY;
+    dragStartRotX = targetRotX;
+    lastInteractT = performance.now();
+  }, { passive: true });
+  scene.addEventListener('touchmove', function (e) {
+    if (!dragging || e.touches.length !== 1) return;
+    targetRotY = dragStartRotY + (e.touches[0].clientX - dragStartX) * 0.008;
+    targetRotX = dragStartRotX + (e.touches[0].clientY - dragStartY) * 0.005;
+    targetRotX = Math.max(-1.1, Math.min(1.1, targetRotX));
+    lastInteractT = performance.now();
+  }, { passive: true });
+  scene.addEventListener('touchend', function () { dragging = false; }, { passive: true });
 
   // 滚轮缩放
   scene.addEventListener('wheel', function (e) {
     e.preventDefault();
-    const delta = -Math.sign(e.deltaY) * 0.1;
-    targetZoom = Math.max(0.55, Math.min(1.6, targetZoom + delta));
-    lastMoveT = performance.now();
+    const delta = -Math.sign(e.deltaY) * 0.08;
+    targetScale = Math.max(0.55, Math.min(1.6, targetScale + delta));
+    lastInteractT = performance.now();
   }, { passive: false });
 
-  // 键盘支持：←→↑↓ 调整角度，+/- 缩放
+  // 键盘
   scene.addEventListener('keydown', function (e) {
-    const step = e.shiftKey ? 15 : 6;
-    if (e.key === 'ArrowLeft') { targetY -= step; e.preventDefault(); }
-    else if (e.key === 'ArrowRight') { targetY += step; e.preventDefault(); }
-    else if (e.key === 'ArrowUp') { targetX -= step; e.preventDefault(); }
-    else if (e.key === 'ArrowDown') { targetX += step; e.preventDefault(); }
-    else if (e.key === '+' || e.key === '=') { targetZoom = Math.min(1.6, targetZoom + 0.1); e.preventDefault(); }
-    else if (e.key === '-' || e.key === '_') { targetZoom = Math.max(0.55, targetZoom - 0.1); e.preventDefault(); }
+    const step = e.shiftKey ? 0.35 : 0.12;
+    if (e.key === 'ArrowLeft') { targetRotY -= step; lastInteractT = performance.now(); e.preventDefault(); }
+    else if (e.key === 'ArrowRight') { targetRotY += step; lastInteractT = performance.now(); e.preventDefault(); }
+    else if (e.key === 'ArrowUp') { targetRotX -= step; lastInteractT = performance.now(); e.preventDefault(); }
+    else if (e.key === 'ArrowDown') { targetRotX += step; lastInteractT = performance.now(); e.preventDefault(); }
+    else if (e.key === '+' || e.key === '=') { targetScale = Math.min(1.6, targetScale + 0.1); lastInteractT = performance.now(); e.preventDefault(); }
+    else if (e.key === '-' || e.key === '_') { targetScale = Math.max(0.55, targetScale - 0.1); lastInteractT = performance.now(); e.preventDefault(); }
   });
 
-  function loop() {
-    // 空闲 > 2s 缓慢自转
-    const idle = performance.now() - lastMoveT > 2000;
-    if (idle) targetY += autoDir * 0.2;
-    // 缓动
-    rotX += (targetX - rotX) * 0.12;
-    rotY += (targetY - rotY) * 0.12;
-    zoom += (targetZoom - zoom) * 0.14;
-    cube.style.transform = 'rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) scale3d(' + zoom.toFixed(3) + ',' + zoom.toFixed(3) + ',' + zoom.toFixed(3) + ')';
-    requestAnimationFrame(loop);
+  function isDark() {
+    return document.documentElement.getAttribute('data-theme') === 'dark';
   }
-  requestAnimationFrame(loop);
+
+  function project(p) {
+    // rotate Y
+    const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+    let x = p.dx * cosY + p.dz * sinY;
+    let z = -p.dx * sinY + p.dz * cosY;
+    let y = p.dy;
+    // rotate X
+    const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+    const y2 = y * cosX - z * sinX;
+    const z2 = y * sinX + z * cosX;
+    // perspective
+    const dist = 2.4;
+    const scaleP = dist / (dist - z2);
+    return { x: x, y: y2, z: z2, s: scaleP };
+  }
+
+  let last = performance.now();
+  function frame(now) {
+    const dt = Math.min(50, now - last) / 16.67; // 归一到 ~60fps
+    last = now;
+
+    // 缓动
+    const ease = 0.12;
+    const idleMs = now - lastInteractT;
+    const autoActive = !reduce && !dragging && idleMs > 1200;
+    if (autoActive) targetRotY += autoSpin * dt;
+    rotY += (targetRotY - rotY) * ease * dt;
+    rotX += (targetRotX - rotX) * ease * dt;
+    scale += (targetScale - scale) * ease * dt;
+
+    // 清屏
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    // 球半径（根据容器尺寸自适应）
+    const R = Math.min(W, H) * 0.34 * scale;
+    const cx = W / 2, cy = H / 2;
+    const focal = 3.6;
+
+    const dark = isDark();
+    const accentRGB = dark ? '168, 168, 240' : '91, 91, 214';
+    const accentRGB2 = dark ? '200, 200, 255' : '60, 60, 180';
+
+    // 投影并收集
+    const projected = particles.map(function (p) {
+      const r = project(p);
+      // 3D 缩放（透视）
+      const persp = focal / (focal - r.z);
+      return {
+        sx: cx + r.x * R * persp,
+        sy: cy + r.y * R * persp,
+        z: r.z,
+        persp: persp,
+        text: p.text
+      };
+    });
+
+    // 从后到前排序（z 小的先画）
+    projected.sort(function (a, b) { return a.z - b.z; });
+
+    // 画粒子（球面上的小点 + 文字）
+    ctx.font = '600 13px "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    projected.forEach(function (r) {
+      // 深度 alpha：z in [-1, 1] → 0.10 ~ 0.95
+      const depth = (r.z + 1) / 2;
+      const alpha = 0.10 + depth * 0.85;
+      // 尺寸随透视缩放
+      const fontSize = Math.max(9, 13 * r.persp * 0.9);
+      ctx.font = '600 ' + fontSize.toFixed(1) + 'px "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace';
+      // 前面用主色，后面用淡化色
+      const col = r.z > 0 ? 'rgba(' + accentRGB2 + ',' + alpha.toFixed(3) + ')' : 'rgba(' + accentRGB + ',' + (alpha * 0.55).toFixed(3) + ')';
+      // 微微的辉光（前景才加，避免性能爆）
+      if (r.z > 0.4) {
+        ctx.shadowColor = 'rgba(' + accentRGB + ',' + (alpha * 0.5).toFixed(3) + ')';
+        ctx.shadowBlur = 8;
+      } else {
+        ctx.shadowBlur = 0;
+      }
+      ctx.fillStyle = col;
+      ctx.fillText(r.text, r.sx, r.sy);
+    });
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(frame);
+  }
+
+  if (reduce) {
+    // 静态：直接画一次
+    requestAnimationFrame(function () { frame(performance.now()); });
+    // 关掉 rAF 循环
+    cancelAnimationFrame; // no-op
+  } else {
+    requestAnimationFrame(frame);
+  }
 })();
 
 /* ============================================================
@@ -2625,7 +2718,7 @@ window.addEventListener('load', () => {
     'ct.wechatHint': '搜索微信号或扫码添加',
     'ct.formNote': '微信扫码加我更快，也可以直接到 <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a> 给我留言。表单暂未启用。',
     'ct.stackTitle': '技术栈',
-    'ct.stackHint': '移动鼠标改变视角 · 滚轮缩放',
+    'ct.stackHint': '拖拽旋转 · 滚轮缩放',
     'ft.aria': '查看版本迭代', 'ft.top': '返回顶部',
     'sc.title': '快捷键', 'sc.d': '切换暗色 / 亮色', 'sc.l': '切换中英文',
     'col.title': '版本迭代',
@@ -2641,7 +2734,7 @@ window.addEventListener('load', () => {
     'col.v14': '多语言 —— 中英文切换（快捷键 L），支持 URL 参数与本地持久化',
     'col.v15': '节奏与细节 —— Hero 间距节奏 32 / 24 / 28 / 20 + 联系区卡片化重构',
     'col.v16': '加微信 —— 联系区新增微信二维码卡片，中英双语提示',
-    'col.v17': '3D 立方体 —— 替换禁用表单为可交互的技术栈立方体（鼠标旋转 / 滚轮缩放 / 自动自转）',
+    'col.v17': '3D 球 —— 替换禁用表单为可交互的技术栈旋转球（拖拽旋转 / 滚轮缩放 / 自动自转）',
     'col.signoff': '—— 每一处克制都是刻意的选择。',
   };
 
@@ -2716,7 +2809,7 @@ window.addEventListener('load', () => {
     'ct.wechatHint': 'Scan QR or search to add',
     'ct.formNote': 'Scan the WeChat QR above to add me — fastest. Or leave a message on <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a>. This form is disabled for now.',
     'ct.stackTitle': 'Tech Stack',
-    'ct.stackHint': 'Move mouse to rotate · Scroll to zoom',
+    'ct.stackHint': 'Drag to rotate · Scroll to zoom',
     'ft.aria': 'View version history', 'ft.top': 'Back to top',
     'sc.title': 'Shortcuts', 'sc.d': 'Toggle light / dark', 'sc.l': 'Toggle language',
     'col.title': 'Version history',
@@ -2732,7 +2825,7 @@ window.addEventListener('load', () => {
     'col.v14': 'i18n — zh/en toggle (shortcut L), URL param + localStorage persistence',
     'col.v15': 'Rhythm — Hero spacing rhythm (32/24/28/20) + Contact section card redesign',
     'col.v16': 'WeChat — added QR code card in Contact section with bilingual hints',
-    'col.v17': '3D Cube — replaced the disabled form with an interactive tech-stack cube (mouse rotate / wheel zoom / auto-spin)',
+    'col.v17': '3D Sphere — replaced the disabled form with an interactive tech-stack particle sphere (drag rotate / wheel zoom / auto-spin)',
     'col.signoff': '—— Every restraint is a deliberate choice.',
   };
 
