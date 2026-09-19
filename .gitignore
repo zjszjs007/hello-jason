@@ -3,6 +3,10 @@
 *.jpg
 *.jpeg
 
+# Keep shipped site assets (QR, logo, etc.)
+!assets/
+!assets/**
+
 # Ignore editor / OS noise
 .DS_Store
 Thumbs.db

@@ -876,6 +876,85 @@ h2.section-title {
   background: #4CC26D;
   box-shadow: 0 0 0 3px rgba(76, 194, 109, 0.22);
 }
+
+/* WeChat contact card (QR + handle) */
+.wechat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px 12px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  align-self: flex-start;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.wechat-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+:root[data-theme="dark"] .wechat-card {
+  background: #17171F;
+  border-color: #2C2C38;
+}
+:root[data-theme="dark"] .wechat-card:hover {
+  border-color: #3C3C4A;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+}
+.wechat-qr-wrap {
+  width: 76px;
+  height: 76px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: #FFFFFF;
+  padding: 6px;
+  box-sizing: content-box;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+:root[data-theme="dark"] .wechat-qr-wrap {
+  border-color: #3C3C4A;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.wechat-qr {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+.wechat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.wechat-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+}
+.wechat-handle {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+}
+.wechat-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+:root[data-theme="dark"] .wechat-label {
+  color: #C6C6CE;
+}
+:root[data-theme="dark"] .wechat-handle {
+  color: #8B8BE8;
+}
+:root[data-theme="dark"] .wechat-hint {
+  color: #7A7A86;
+}
 .contact-info h3 {
   font-size: 20px;
   margin-bottom: 12px;
@@ -1797,6 +1876,20 @@ body.colophon-open { overflow: hidden; }
           <span class="dot" aria-hidden="true"></span>
           <span data-i18n="ct.status">接项目中 · 通常 24h 内回复</span>
         </div>
+
+        <div class="wechat-card" aria-label="WeChat contact">
+          <div class="wechat-qr-wrap">
+            <img class="wechat-qr" src="assets/wechat-qr-placeholder.png"
+                 alt="WeChat QR code placeholder — replace with your real WeChat QR"
+                 width="76" height="76" loading="lazy" />
+          </div>
+          <div class="wechat-info">
+            <div class="wechat-label" data-i18n="ct.wechatLabel">微信扫码加我</div>
+            <div class="wechat-handle">zjszjs007</div>
+            <div class="wechat-hint" data-i18n="ct.wechatHint">搜索微信号或扫码添加</div>
+          </div>
+        </div>
+
         <p data-i18n="ct.info">欢迎就项目合作、独立开发、技术探讨等话题给我留言；也可以在 GitHub 上直接开 Issue。</p>
         <a href="https://github.com/zjszjs007" class="contact-email" target="_blank" rel="noopener">
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5A6.5 6.5 0 002 8.5c0 2.88 1.86 5.32 4.4 6.18.32.06.44-.14.44-.32v-1.14c-1.78.4-2.16-.86-2.16-.86-.29-.74-.71-.94-.71-.94-.58-.4.04-.4.04-.4.64.04.98.66.98.66.57.98 1.5.7 1.86.53.06-.41.22-.7.4-.86-1.44-.16-2.94-.72-2.94-3.2 0-.7.25-1.28.66-1.74-.07-.16-.28-.82.06-1.72 0 0 .54-.17 1.76.66a6.1 6.1 0 013.2 0c1.22-.83 1.76-.66 1.76-.66.34.9.13 1.56.06 1.72.41.46.66 1.04.66 1.74 0 2.48-1.5 3.04-2.94 3.2.23.2.44.59.44 1.19v1.76c0 .18.12.39.45.31A6.5 6.5 0 0014 8.5 6.5 6.5 0 008 1.5z" fill="currentColor"/></svg>
@@ -1912,6 +2005,14 @@ body.colophon-open { overflow: hidden; }
           <li>
             <span class="ver">v1.4</span>
             <span class="log" data-i18n="col.v14">多语言 —— 中英文切换（快捷键 <code>L</code>），支持 URL 参数与本地持久化</span>
+          </li>
+          <li>
+            <span class="ver">v1.5</span>
+            <span class="log" data-i18n="col.v15">节奏与细节 —— Hero 间距节奏（32 / 24 / 28 / 20）+ 联系区卡片化重构</span>
+          </li>
+          <li>
+            <span class="ver">v1.6</span>
+            <span class="log" data-i18n="col.v16">加微信 —— 联系区新增微信二维码卡片，中英双语提示</span>
           </li>
         </ol>
       </article>
@@ -2300,6 +2401,8 @@ window.addEventListener('load', () => {
     'ct.status': '接项目中 · 通常 24h 内回复',
     'ct.tagsLabel': '擅长',
     'ct.tag1': '独立开发', 'ct.tag2': '后端 / 全栈', 'ct.tag3': 'Web3', 'ct.tag4': '设计',
+    'ct.wechatLabel': '微信扫码加我',
+    'ct.wechatHint': '搜索微信号或扫码添加',
     'ct.formNote': '表单目前是<b>占位版本</b>，尚未接入后端。想真正收到我的回复，请到 <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub 开 Issue</a> 或直接联系 <code>zjszjs007</code>。',
     'ft.aria': '查看版本迭代', 'ft.top': '返回顶部',
     'sc.title': '快捷键', 'sc.d': '切换暗色 / 亮色', 'sc.l': '切换中英文',
@@ -2314,6 +2417,8 @@ window.addEventListener('load', () => {
     'col.v12': 'Hero 提示 —— 徽章旁加"亮色 / 暗色"实时状态，随主题切换同步更新',
     'col.v13': '当前版本 —— 补上这份迭代日志本身，形成闭环',
     'col.v14': '多语言 —— 中英文切换（快捷键 L），支持 URL 参数与本地持久化',
+    'col.v15': '节奏与细节 —— Hero 间距节奏 32 / 24 / 28 / 20 + 联系区卡片化重构',
+    'col.v16': '加微信 —— 联系区新增微信二维码卡片，中英双语提示',
     'col.signoff': '—— 每一处克制都是刻意的选择。',
   };
 
@@ -2384,6 +2489,8 @@ window.addEventListener('load', () => {
     'ct.status': 'Available for projects · Usually reply within 24h',
     'ct.tagsLabel': 'Focus',
     'ct.tag1': 'Indie', 'ct.tag2': 'Backend / Full-stack', 'ct.tag3': 'Web3', 'ct.tag4': 'Design',
+    'ct.wechatLabel': 'WeChat',
+    'ct.wechatHint': 'Scan QR or search to add',
     'ct.formNote': 'The form is a <b>placeholder</b> for now and is not wired to a backend. To actually reach me, open an Issue on <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub</a> or DM <code>zjszjs007</code>.',
     'ft.aria': 'View version history', 'ft.top': 'Back to top',
     'sc.title': 'Shortcuts', 'sc.d': 'Toggle light / dark', 'sc.l': 'Toggle language',
@@ -2398,6 +2505,8 @@ window.addEventListener('load', () => {
     'col.v12': 'Hero hint — "Light / Dark" badge now shows the current theme and updates live',
     'col.v13': 'Current — this log itself, closing the loop',
     'col.v14': 'i18n — zh/en toggle (shortcut L), URL param + localStorage persistence',
+    'col.v15': 'Rhythm — Hero spacing rhythm (32/24/28/20) + Contact section card redesign',
+    'col.v16': 'WeChat — added QR code card in Contact section with bilingual hints',
     'col.signoff': '—— Every restraint is a deliberate choice.',
   };
 
