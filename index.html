@@ -1145,15 +1145,6 @@ h2.section-title {
   display: block;
 }
 
-.tech-stack-hint {
-  text-align: center;
-  font-size: 11px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  letter-spacing: 0.04em;
-}
-:root[data-theme="dark"] .tech-stack-hint { color: #7A7A86; }
-
 @media (max-width: 640px) {
   .tech-stack-scene { height: 300px; }
 }
@@ -1926,8 +1917,8 @@ body.colophon-open { overflow: hidden; }
 
         <div class="wechat-card" aria-label="WeChat contact">
           <div class="wechat-qr-wrap">
-            <img class="wechat-qr" src="assets/wechat-qr-placeholder.png"
-                 alt="WeChat QR code placeholder — replace with your real WeChat QR"
+            <img class="wechat-qr" src="assets/wechat-qr.jpg"
+                 alt="Jason Zhang 的微信二维码"
                  width="76" height="76" loading="lazy" />
           </div>
           <div class="wechat-info">
@@ -1955,7 +1946,6 @@ body.colophon-open { overflow: hidden; }
         <div class="tech-stack-scene" id="techStackScene" tabindex="0" role="img" aria-label="Interactive 3D tech-stack sphere: TypeScript, React, Node.js, Solidity, Tailwind CSS, Web3, EVM">
           <canvas id="techSphere" aria-hidden="true"></canvas>
         </div>
-        <div class="tech-stack-hint" data-i18n="ct.stackHint">拖拽旋转 · 滚轮缩放</div>
       </div>
     </div>
   </div>
@@ -2660,7 +2650,6 @@ window.addEventListener('load', () => {
     'ct.wechatLabel': '微信扫码加我',
     'ct.wechatHint': '搜索微信号或扫码添加',
     'ct.formNote': '微信扫码加我更快，也可以直接到 <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a> 给我留言。表单暂未启用。',
-    'ct.stackHint': '拖拽旋转 · 滚轮缩放',
     'ft.aria': '查看版本迭代', 'ft.top': '返回顶部',
     'sc.title': '快捷键', 'sc.d': '切换暗色 / 亮色', 'sc.l': '切换中英文',
     'col.title': '版本迭代',
@@ -2750,7 +2739,6 @@ window.addEventListener('load', () => {
     'ct.wechatLabel': 'WeChat',
     'ct.wechatHint': 'Scan QR or search to add',
     'ct.formNote': 'Scan the WeChat QR above to add me — fastest. Or leave a message on <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a>. This form is disabled for now.',
-    'ct.stackHint': 'Drag to rotate · Scroll to zoom',
     'ft.aria': 'View version history', 'ft.top': 'Back to top',
     'sc.title': 'Shortcuts', 'sc.d': 'Toggle light / dark', 'sc.l': 'Toggle language',
     'col.title': 'Version history',
