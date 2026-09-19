@@ -1,0 +1,14 @@
+# Ignore local preview/QA screenshots (debug-only, not part of the site)
+*.png
+*.jpg
+*.jpeg
+
+# Ignore editor / OS noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Keep .nojekyll (required for GitHub Pages)
+!.nojekyll
