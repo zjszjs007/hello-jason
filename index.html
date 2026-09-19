@@ -1113,68 +1113,31 @@ h2.section-title {
 }
 
 /* ============================================================
-   TECH-STACK 3D CUBE
+   TECH-STACK 3D SPHERE
    ============================================================ */
 .tech-stack {
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  padding: 24px 20px 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  align-self: stretch;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
-}
-:root[data-theme="dark"] .tech-stack {
-  background: #17171F;
-  border-color: #2C2C38;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.24);
-}
-.tech-stack-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
   gap: 12px;
+  align-self: stretch;
 }
-.tech-stack-title {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-secondary);
-}
-.tech-stack-hint {
-  font-size: 11px;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-}
-:root[data-theme="dark"] .tech-stack-hint { color: #7A7A86; }
-
 .tech-stack-scene {
   width: 100%;
-  height: 340px;
+  height: 380px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
-  border-radius: var(--radius-sm);
-  background:
-    radial-gradient(ellipse at center, rgba(91, 91, 214, 0.05) 0%, transparent 55%);
   cursor: grab;
   user-select: none;
   outline: none;
 }
 .tech-stack-scene:focus-visible {
   box-shadow: 0 0 0 2px var(--accent);
+  border-radius: 8px;
 }
 .tech-stack-scene:active { cursor: grabbing; }
-:root[data-theme="dark"] .tech-stack-scene {
-  background:
-    radial-gradient(ellipse at center, rgba(139, 139, 232, 0.08) 0%, transparent 55%);
-}
 
 .tech-stack-scene canvas {
   width: 100%;
@@ -1182,30 +1145,17 @@ h2.section-title {
   display: block;
 }
 
-.tech-stack-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  justify-content: center;
-}
-.tech-stack-legend span {
-  padding: 4px 10px;
-  background: var(--accent-soft);
-  color: var(--accent);
-  border: 1px solid transparent;
-  border-radius: 100px;
+.tech-stack-hint {
+  text-align: center;
   font-size: 11px;
+  color: var(--text-muted);
   font-family: var(--font-mono);
-  font-weight: 500;
+  letter-spacing: 0.04em;
 }
-:root[data-theme="dark"] .tech-stack-legend span {
-  background: rgba(139, 139, 232, 0.14);
-  color: #A8A8F0;
-}
+:root[data-theme="dark"] .tech-stack-hint { color: #7A7A86; }
 
 @media (max-width: 640px) {
-  .tech-stack-scene { height: 260px; }
-  .tech-stack-legend span { font-size: 10px; }
+  .tech-stack-scene { height: 300px; }
 }
 
 /* ============================================================
@@ -2000,19 +1950,12 @@ body.colophon-open { overflow: hidden; }
           <span class="tag" data-i18n="ct.tag4">设计</span>
         </div>
       </div>
-      <!-- Tech-stack 3D cube (replaces the disabled placeholder form) -->
-      <div class="tech-stack reveal" aria-labelledby="techStackTitle">
-        <div class="tech-stack-header">
-          <div class="tech-stack-title" id="techStackTitle" data-i18n="ct.stackTitle">技术栈</div>
-          <div class="tech-stack-hint" data-i18n="ct.stackHint">拖拽旋转 · 滚轮缩放</div>
-        </div>
+      <!-- Tech-stack 3D sphere (replaces the disabled placeholder form) -->
+      <div class="tech-stack reveal">
         <div class="tech-stack-scene" id="techStackScene" tabindex="0" role="img" aria-label="Interactive 3D tech-stack sphere: TypeScript, React, Node.js, Solidity, Tailwind CSS, Web3, EVM">
           <canvas id="techSphere" aria-hidden="true"></canvas>
         </div>
-        <div class="tech-stack-legend" id="techStackLegend">
-          <span>TypeScript</span><span>React</span><span>Node.js</span>
-          <span>Solidity</span><span>Tailwind CSS</span><span>Web3 / EVM</span>
-        </div>
+        <div class="tech-stack-hint" data-i18n="ct.stackHint">拖拽旋转 · 滚轮缩放</div>
       </div>
     </div>
   </div>
@@ -2088,7 +2031,7 @@ body.colophon-open { overflow: hidden; }
           </li>
           <li>
             <span class="ver">v1.7</span>
-            <span class="log" data-i18n="col.v17">3D 球 —— 替换禁用表单为可交互的技术栈旋转球（拖拽旋转 / 滚轮缩放 / 自动自转）</span>
+            <span class="log" data-i18n="col.v17">3D 球 —— 替换禁用表单为可交互的技术栈粒子球（拖拽旋转 / 滚轮缩放 / 自动自转），无外框裸置</span>
           </li>
         </ol>
       </article>
@@ -2717,7 +2660,6 @@ window.addEventListener('load', () => {
     'ct.wechatLabel': '微信扫码加我',
     'ct.wechatHint': '搜索微信号或扫码添加',
     'ct.formNote': '微信扫码加我更快，也可以直接到 <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a> 给我留言。表单暂未启用。',
-    'ct.stackTitle': '技术栈',
     'ct.stackHint': '拖拽旋转 · 滚轮缩放',
     'ft.aria': '查看版本迭代', 'ft.top': '返回顶部',
     'sc.title': '快捷键', 'sc.d': '切换暗色 / 亮色', 'sc.l': '切换中英文',
@@ -2734,7 +2676,7 @@ window.addEventListener('load', () => {
     'col.v14': '多语言 —— 中英文切换（快捷键 L），支持 URL 参数与本地持久化',
     'col.v15': '节奏与细节 —— Hero 间距节奏 32 / 24 / 28 / 20 + 联系区卡片化重构',
     'col.v16': '加微信 —— 联系区新增微信二维码卡片，中英双语提示',
-    'col.v17': '3D 球 —— 替换禁用表单为可交互的技术栈旋转球（拖拽旋转 / 滚轮缩放 / 自动自转）',
+    'col.v17': '3D 球 —— 替换禁用表单为可交互的技术栈粒子球（拖拽旋转 / 滚轮缩放 / 自动自转），无外框裸置',
     'col.signoff': '—— 每一处克制都是刻意的选择。',
   };
 
@@ -2808,7 +2750,6 @@ window.addEventListener('load', () => {
     'ct.wechatLabel': 'WeChat',
     'ct.wechatHint': 'Scan QR or search to add',
     'ct.formNote': 'Scan the WeChat QR above to add me — fastest. Or leave a message on <a href="https://github.com/zjszjs007" target="_blank" rel="noopener">GitHub Issues</a>. This form is disabled for now.',
-    'ct.stackTitle': 'Tech Stack',
     'ct.stackHint': 'Drag to rotate · Scroll to zoom',
     'ft.aria': 'View version history', 'ft.top': 'Back to top',
     'sc.title': 'Shortcuts', 'sc.d': 'Toggle light / dark', 'sc.l': 'Toggle language',
@@ -2825,7 +2766,7 @@ window.addEventListener('load', () => {
     'col.v14': 'i18n — zh/en toggle (shortcut L), URL param + localStorage persistence',
     'col.v15': 'Rhythm — Hero spacing rhythm (32/24/28/20) + Contact section card redesign',
     'col.v16': 'WeChat — added QR code card in Contact section with bilingual hints',
-    'col.v17': '3D Sphere — replaced the disabled form with an interactive tech-stack particle sphere (drag rotate / wheel zoom / auto-spin)',
+    'col.v17': '3D Sphere — replaced the disabled form with an interactive tech-stack particle sphere (drag rotate / wheel zoom / auto-spin), framed as bare canvas',
     'col.signoff': '—— Every restraint is a deliberate choice.',
   };
 
