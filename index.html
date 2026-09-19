@@ -431,7 +431,7 @@ h2.section-title {
 .hero-portrait {
   width: 100%;
   height: 100%;
-  border-radius: var(--radius-xl);
+  border-radius: 44px;
   border: 1px solid var(--border);
   overflow: hidden;
   position: relative;
@@ -450,6 +450,7 @@ h2.section-title {
   object-fit: cover;
   object-position: center 20%;
   display: block;
+  filter: brightness(1.14) contrast(1.06) saturate(1.12);
 }
 .hero-portrait::after {
   content: '';
@@ -661,6 +662,9 @@ h2.section-title {
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
+.project-card.project-card--full {
+  grid-column: 1 / -1;
+}
 .project-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -697,6 +701,17 @@ h2.section-title {
   font-size: 12px;
   background:
     linear-gradient(135deg, var(--surface-alt) 0%, #EEEEE9 100%);
+}
+.project-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.project-card:hover .project-cover-image {
+  transform: scale(1.03);
 }
 .project-card:nth-child(1) .project-cover-placeholder {
   background: linear-gradient(135deg, #EEEEFB 0%, #F4E9FB 100%);
@@ -1739,10 +1754,28 @@ body.colophon-open { overflow: hidden; }
     <h2 class="section-title reveal" data-i18n="prj.title">选中的几个项目</h2>
     <p class="section-desc reveal" data-i18n="prj.desc">每一段经历背后都有一个真实的产品。这里挑选了我最想与你分享的几个。</p>
     <div class="projects-grid">
+      <article class="project-card reveal project-card--full">
+        <div class="project-cover">
+          <span class="project-badge" data-i18n="prj.p3Badge">Web · 前端</span>
+          <img class="project-cover-image" src="assets/project-date-lightly.png" alt="Date-Lightly 项目预览：极简日期卡片概念" loading="lazy" width="1792" height="1008" />
+        </div>
+        <div class="project-body">
+          <h3 class="project-title">Date-Lightly</h3>
+          <p class="project-desc" data-i18n="prj.p3Desc">轻量日期与邀请页面，用极小的前端体量做出可直接分享的日期卡片；通过 GitHub Pages 一键部署，适合个人与团队快速发布。</p>
+        </div>
+        <div class="project-footer">
+          <div class="project-links">
+            <a href="https://zjszjs007.github.io/Date-Lightly/" target="_blank" rel="noopener" aria-label="Online preview">Preview ↗</a>
+            <a href="https://github.com/zjszjs007/Date-Lightly" target="_blank" rel="noopener" aria-label="GitHub">GitHub ↗</a>
+          </div>
+          <span>TypeScript · GitHub Pages</span>
+        </div>
+      </article>
+
       <article class="project-card reveal">
         <div class="project-cover">
           <span class="project-badge" data-i18n="prj.p1Badge">Web3 · 众筹</span>
-          <div class="project-cover-placeholder">ChainFund</div>
+          <img class="project-cover-image" src="assets/project-chainfund.png" alt="ChainFund 项目预览：去中心化众筹概念" loading="lazy" width="1792" height="1008" />
         </div>
         <div class="project-body">
           <h3 class="project-title" data-i18n="prj.p1Title">链筹 ChainFund</h3>
@@ -1759,7 +1792,7 @@ body.colophon-open { overflow: hidden; }
       <article class="project-card reveal">
         <div class="project-cover">
           <span class="project-badge" data-i18n="prj.p2Badge">Web3 · 拍卖</span>
-          <div class="project-cover-placeholder">Monad Auction</div>
+          <img class="project-cover-image" src="assets/project-monad-auction.png" alt="MonadAuction 项目预览：密封竞价拍卖概念" loading="lazy" width="1792" height="1008" />
         </div>
         <div class="project-body">
           <h3 class="project-title">MonadAuction</h3>
@@ -1770,24 +1803,6 @@ body.colophon-open { overflow: hidden; }
             <a href="https://github.com/zjszjs007/MonadAuctionAgent" target="_blank" rel="noopener" aria-label="GitHub">GitHub ↗</a>
           </div>
           <span>Next.js · Solidity · Monad</span>
-        </div>
-      </article>
-
-      <article class="project-card reveal">
-        <div class="project-cover">
-          <span class="project-badge" data-i18n="prj.p3Badge">Web · 前端</span>
-          <div class="project-cover-placeholder">Date Lightly</div>
-        </div>
-        <div class="project-body">
-          <h3 class="project-title">Date-Lightly</h3>
-          <p class="project-desc" data-i18n="prj.p3Desc">轻量日期与邀请页面，用极小的前端体量做出可直接分享的日期卡片；通过 GitHub Pages 一键部署，适合个人与团队快速发布。</p>
-        </div>
-        <div class="project-footer">
-          <div class="project-links">
-            <a href="https://zjszjs007.github.io/Date-Lightly/" target="_blank" rel="noopener" aria-label="Online preview">Preview ↗</a>
-            <a href="https://github.com/zjszjs007/Date-Lightly" target="_blank" rel="noopener" aria-label="GitHub">GitHub ↗</a>
-          </div>
-          <span>TypeScript · GitHub Pages</span>
         </div>
       </article>
     </div>
@@ -1840,7 +1855,7 @@ body.colophon-open { overflow: hidden; }
       </div>
       <!-- Tech-stack 3D sphere (replaces the disabled placeholder form) -->
       <div class="tech-stack reveal">
-        <div class="tech-stack-scene" id="techStackScene" tabindex="0" role="img" aria-label="Interactive 3D tech-stack sphere: TypeScript, React, Node.js, Solidity, Tailwind CSS, Web3, EVM">
+        <div class="tech-stack-scene" id="techStackScene" tabindex="0" role="img" aria-label="Interactive 3D tech-stack sphere: 前端、后端、数据库、消息队列、容器编排与基础设施技术栈">
           <canvas id="techSphere" aria-hidden="true"></canvas>
         </div>
       </div>
@@ -2109,15 +2124,31 @@ window.addEventListener('load', () => {
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
-  // 技术栈文字池（重复几次填充球面）
+  // 技术栈文字池（前端 + 后端 + 数据 + 基础设施，重复几次填充球面）
   const TECH = [
+    // 前端
     'TypeScript', 'React', 'Node.js', 'Solidity',
     'Tailwind', 'Web3', 'EVM', 'JavaScript',
-    'Python', 'Go', 'Rust', 'Docker',
-    'Kubernetes', 'PostgreSQL', 'Redis', 'GraphQL',
-    'Next.js', 'Vite', 'WebAssembly', 'Git',
-    'Linux', 'AWS', 'Figma', 'WebSocket',
-    'REST', 'JWT', 'WebAuthn', 'Ethereum'
+    'Next.js', 'Vite', 'WebAssembly', 'Vue',
+    // 语言 & 运行时
+    'Python', 'Go', 'Rust', 'Java',
+    'Kotlin', 'C#', 'PHP',
+    // 后端框架
+    'Spring Boot', 'Django', 'Flask', 'FastAPI',
+    'NestJS', 'Express', 'Rails', 'Laravel',
+    '.NET', 'Gin', 'Echo', 'Celery',
+    // 数据库
+    'PostgreSQL', 'MySQL', 'MongoDB', 'Redis',
+    'SQLite', 'ClickHouse', 'CockroachDB', 'Elasticsearch',
+    // 消息与 API
+    'Kafka', 'RabbitMQ', 'NATS', 'GraphQL',
+    'gRPC', 'REST', 'WebSocket', 'JWT', 'WebAuthn',
+    // 基础设施 / 运维
+    'Docker', 'Kubernetes', 'Terraform', 'Nginx',
+    'Grafana', 'Prometheus', 'Linux', 'Git', 'AWS',
+    'Vercel', 'GitHub Actions', 'Figma',
+    // 区块链
+    'Ethereum', 'Hardhat', 'Foundry', 'IPFS'
   ];
 
   // Fibonacci 球面分布
@@ -2294,7 +2325,7 @@ window.addEventListener('load', () => {
     projected.sort(function (a, b) { return a.z - b.z; });
 
     // 画粒子（球面上的小点 + 文字）
-    ctx.font = '600 13px "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace';
+    ctx.font = '600 11px "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     projected.forEach(function (r) {
@@ -2302,7 +2333,7 @@ window.addEventListener('load', () => {
       const depth = (r.z + 1) / 2;
       const alpha = 0.10 + depth * 0.85;
       // 尺寸随透视缩放
-      const fontSize = Math.max(9, 13 * r.persp * 0.9);
+      const fontSize = Math.max(8, 11 * r.persp * 0.9);
       ctx.font = '600 ' + fontSize.toFixed(1) + 'px "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace';
       // 前面用主色，后面用淡化色
       const col = r.z > 0 ? 'rgba(' + accentRGB2 + ',' + alpha.toFixed(3) + ')' : 'rgba(' + accentRGB + ',' + (alpha * 0.55).toFixed(3) + ')';
