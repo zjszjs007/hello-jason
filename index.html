@@ -431,7 +431,7 @@ h2.section-title {
 .hero-portrait {
   width: 100%;
   height: 100%;
-  border-radius: 44px;
+  border-radius: 32px;
   border: 1px solid var(--border);
   overflow: hidden;
   position: relative;
@@ -665,6 +665,10 @@ h2.section-title {
 .project-card.project-card--full {
   grid-column: 1 / -1;
 }
+/* 全宽卡片使用更宽的画面比例，避免图片过大压场 */
+.project-card.project-card--full .project-cover {
+  aspect-ratio: 21 / 8;
+}
 .project-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -703,6 +707,8 @@ h2.section-title {
     linear-gradient(135deg, var(--surface-alt) 0%, #EEEEE9 100%);
 }
 .project-cover-image {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
