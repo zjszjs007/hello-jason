@@ -1498,6 +1498,19 @@ body.colophon-open { overflow: hidden; }
 }
 
 /* Star burst: 从点击点向外迸射的小星光，颜色跟随主题（--text） */
+/* 主题差异化的星爆参数：半径 / 时长 / 颗粒尺寸 / 环起点 */
+:root {
+  --star-burst-radius: 34px;
+  --star-burst-duration: 700ms;
+  --star-burst-particle-size: 6px;
+  --star-burst-ring-start: 20px;
+}
+:root[data-theme="dark"] {
+  --star-burst-radius: 40px;
+  --star-burst-duration: 820ms;
+  --star-burst-particle-size: 7px;
+  --star-burst-ring-start: 22px;
+}
 .star-burst {
   position: fixed;
   top: 0;
@@ -1512,8 +1525,8 @@ body.colophon-open { overflow: hidden; }
   position: absolute;
   left: 0;
   top: 0;
-  width: 6px;
-  height: 6px;
+  width: var(--star-burst-particle-size);
+  height: var(--star-burst-particle-size);
   background: currentColor;
   border-radius: 50% 0 50% 0;
   transform: rotate(45deg);
@@ -1522,7 +1535,7 @@ body.colophon-open { overflow: hidden; }
   will-change: transform, opacity;
 }
 .star-burst.play i {
-  animation: starBurstFly 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: starBurstFly var(--star-burst-duration) cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 @keyframes starBurstFly {
   0%   { opacity: 0; transform: rotate(var(--rot)) translate(0, 0) scale(0.4); }
@@ -1533,17 +1546,17 @@ body.colophon-open { overflow: hidden; }
   position: absolute;
   left: 0;
   top: 0;
-  width: 20px;
-  height: 20px;
-  margin-left: -10px;
-  margin-top: -10px;
+  width: var(--star-burst-ring-start);
+  height: var(--star-burst-ring-start);
+  margin-left: calc(var(--star-burst-ring-start) / -2);
+  margin-top: calc(var(--star-burst-ring-start) / -2);
   border-radius: 50%;
   border: 1.5px solid currentColor;
   opacity: 0;
   will-change: transform, opacity;
 }
 .star-burst.play .ring-pulse {
-  animation: starRingPulse 0.6s ease-out forwards;
+  animation: starRingPulse calc(var(--star-burst-duration) * 0.857) ease-out forwards;
 }
 @keyframes starRingPulse {
   0%   { opacity: 0.85; transform: scale(0.2); }
@@ -2258,6 +2271,27 @@ window.addEventListener('load', () => {
     }
   }
 
+  // 从 CSS 变量读取星爆参数（用于粒子散布 + 清理 timeout，与主题联动）
+  function readBurstParams() {
+    const cs = getComputedStyle(document.documentElement);
+    function num(name, fallback) {
+      const raw = cs.getPropertyValue(name).trim();
+      const n = parseFloat(raw);
+      return isFinite(n) ? n : fallback;
+    }
+    // 支持 "700ms" / "0.7s" / "700"
+    const rawDur = cs.getPropertyValue('--star-burst-duration').trim();
+    let durationMs = parseFloat(rawDur);
+    if (isFinite(durationMs)) {
+      if (rawDur.includes('s') && !rawDur.includes('ms')) durationMs *= 1000;
+    } else { durationMs = 700; }
+    return {
+      radius: num('--star-burst-radius', 34),
+      particleSize: num('--star-burst-particle-size', 6),
+      durationMs: durationMs,
+    };
+  }
+
   // 点击特效：在点击位置生成星爆 + 星形图标脉冲
   // 点击落在交互元素上 → burst 走 accent 色，与光标 hover 呼应
   // 点击落在正文/背景上 → burst 走 --text 主题色，融合背景
@@ -2275,13 +2309,18 @@ window.addEventListener('load', () => {
 
     burst.classList.toggle('on-accent', onAccent);
 
-    // 粒子迸射：6 颗小星光 + 1 个圆环脉冲
+    // 从主题 token 读参数：粒子散布半径、数量、时长
+    const { radius, durationMs } = readBurstParams();
+    const inner = radius * 0.65;   // 内圈基准
+    const outer = radius;          // 外圈上限
+
+    // 粒子迸射：7 颗小星光 + 1 个圆环脉冲
     burst.innerHTML = '';
     for (let i = 0; i < 7; i++) {
       const p = document.createElement('i');
       const angle = (i / 7) * Math.PI * 2 + Math.random() * 0.4;
-      const dist = 22 + Math.random() * 14;
-      p.style.setProperty('--rot', (angle * 180 / Math.PI) + 'deg');
+      const dist = inner + Math.random() * (outer - inner);
+      p.style.setProperty('--rot', (angle * 180 / Math.PI).toFixed(2) + 'deg');
       p.style.setProperty('--tx', (Math.cos(angle) * dist).toFixed(1) + 'px');
       p.style.setProperty('--ty', (Math.sin(angle) * dist).toFixed(1) + 'px');
       p.style.animationDelay = (Math.random() * 40) + 'ms';
@@ -2298,7 +2337,7 @@ window.addEventListener('load', () => {
     setTimeout(function () {
       burst.classList.remove('play');
       burst.innerHTML = '';
-    }, 800);
+    }, durationMs + 100);
   }
 
   window.addEventListener('mousemove', onMove, { passive: true });
