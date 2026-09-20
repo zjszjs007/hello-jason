@@ -1437,9 +1437,10 @@ body.colophon-open { overflow: hidden; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ============================================================
-   Custom cursor (GitHub-style): 单个 GitHub Octocat 图标
-   - 只有一个 20x20 图标，紧贴鼠标
-   - 进入交互元素时轻微放大 + accent 色
+   Custom cursor (GitHub-style): GitHub 星形图标
+   - 22x22 星形光标，紧贴鼠标
+   - hover 交互元素时：放大到 28px + accent 色 + 轻微上旋
+   - 点击任意位置：粒子 + 缩放脉冲 + 短促星光迸射（star burst）
    - 触屏 / reduced-motion 自动禁用，恢复默认光标
    ============================================================ */
 .cursor-icon {
@@ -1455,7 +1456,7 @@ body.colophon-open { overflow: hidden; }
   color: #24292F;
   opacity: 0;
   will-change: transform, opacity;
-  transition: opacity 0.25s ease, width 0.2s cubic-bezier(0.22, 1, 0.36, 1), height 0.2s cubic-bezier(0.22, 1, 0.36, 1), margin-left 0.2s cubic-bezier(0.22, 1, 0.36, 1), margin-top 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease;
+  transition: opacity 0.25s ease, color 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1465,6 +1466,10 @@ body.colophon-open { overflow: hidden; }
   height: 100%;
   display: block;
   fill: currentColor;
+  stroke: currentColor;
+  stroke-width: 0.4;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
 }
 .cursor-icon.is-active { opacity: 1; }
 .cursor-icon.is-hover {
@@ -1474,11 +1479,78 @@ body.colophon-open { overflow: hidden; }
   margin-top: -14px;
   color: var(--accent);
 }
+.cursor-icon.is-hover svg {
+  transform: rotate(72deg) scale(1.15);
+}
+.cursor-icon.is-clicking svg {
+  animation: cursorStarPop 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes cursorStarPop {
+  0%   { transform: rotate(0deg) scale(1); }
+  35%  { transform: rotate(72deg) scale(1.8); }
+  70%  { transform: rotate(120deg) scale(0.75); }
+  100% { transform: rotate(72deg) scale(1.15); }
+}
 :root[data-theme="dark"] .cursor-icon { color: #F0F0F0; }
 :root[data-theme="dark"] .cursor-icon.is-hover { color: #8B8BF0; }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
   .cursor-icon { display: none; }
 }
+
+/* Star burst: 从点击点向外迸射的小星光 */
+.star-burst {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 9999;
+}
+.star-burst i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  border-radius: 50% 0 50% 0;
+  transform: rotate(45deg);
+  box-shadow: 0 0 6px currentColor;
+  color: var(--accent);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.star-burst.play i {
+  animation: starBurstFly 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+@keyframes starBurstFly {
+  0%   { opacity: 0; transform: rotate(var(--rot)) translate(0, 0) scale(0.4); }
+  20%  { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--rot)) translate(var(--tx), var(--ty)) scale(1); }
+}
+.star-burst .ring-pulse {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  opacity: 0;
+  will-change: transform, opacity;
+}
+.star-burst.play .ring-pulse {
+  animation: starRingPulse 0.6s ease-out forwards;
+}
+@keyframes starRingPulse {
+  0%   { opacity: 0.9; transform: scale(0.2); }
+  100% { opacity: 0; transform: scale(3); }
+}
+:root[data-theme="dark"] .star-burst i { color: #8B8BF0; background: #8B8BF0; }
+:root[data-theme="dark"] .star-burst .ring-pulse { border-color: #8B8BF0; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -1522,12 +1594,14 @@ body.colophon-open { overflow: hidden; }
 </head>
 <body>
 
-<!-- GitHub 章鱼图标光标 -->
+<!-- GitHub 星形图标光标 -->
 <div class="cursor-icon" id="cursorIcon" aria-hidden="true">
-  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GitHub">
-    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.28.68 0 1.36.09 2 .28 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Star">
+    <path fill-rule="evenodd" d="M8 .25a.75.75 0 0 1 .673.428l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.75.75 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.678A.75.75 0 0 1 8 .25z"/>
   </svg>
 </div>
+<!-- Star burst 特效容器 -->
+<div class="star-burst" id="starBurst" aria-hidden="true"></div>
 
 <!-- ============================================================
      NAVIGATION
@@ -2144,9 +2218,10 @@ window.addEventListener('load', () => {
 })();
 
 /* ============================================================
-   CUSTOM CURSOR (GitHub-style): 单个 GitHub Octocat 图标
-   - 20px 图标紧贴鼠标（无 lerp）
-   - 悬停交互元素时：放大到 26px、变 accent 色
+   CUSTOM CURSOR (GitHub-style): GitHub 星形图标 + 点击星爆特效
+   - 22x22 星形光标紧贴鼠标（无 lerp）
+   - 悬停交互元素时：放大到 28px + accent 色 + 星形轻微旋转
+   - 点击任意位置：星形放大脉冲 + 粒子迸射 + 圆环扩散
    - 只在有鼠标设备 + 未请求减少动效时启用；
      启用后隐藏系统默认光标（cursor: none）
    ============================================================ */
@@ -2156,6 +2231,7 @@ window.addEventListener('load', () => {
   if (reduce || !finePointer) return;
 
   const icon = document.getElementById('cursorIcon');
+  const burst = document.getElementById('starBurst');
   if (!icon) return;
 
   // 启用后隐藏系统默认光标
@@ -2182,7 +2258,45 @@ window.addEventListener('load', () => {
     }
   }
 
+  // 点击特效：在点击位置生成星爆 + 星形图标脉冲
+  function onDown(e) {
+    if (!burst) return;
+    const x = e.clientX | 0, y = e.clientY | 0;
+    // 星形图标缩放脉冲
+    icon.classList.remove('is-clicking');
+    // 强制 reflow 触发动画重播
+    void icon.offsetWidth;
+    icon.classList.add('is-clicking');
+    setTimeout(function () { icon.classList.remove('is-clicking'); }, 420);
+
+    // 粒子迸射：6 颗小星光 + 1 个圆环脉冲
+    burst.innerHTML = '';
+    for (let i = 0; i < 7; i++) {
+      const p = document.createElement('i');
+      const angle = (i / 7) * Math.PI * 2 + Math.random() * 0.4;
+      const dist = 22 + Math.random() * 14;
+      p.style.setProperty('--rot', (angle * 180 / Math.PI) + 'deg');
+      p.style.setProperty('--tx', (Math.cos(angle) * dist).toFixed(1) + 'px');
+      p.style.setProperty('--ty', (Math.sin(angle) * dist).toFixed(1) + 'px');
+      p.style.animationDelay = (Math.random() * 40) + 'ms';
+      burst.appendChild(p);
+    }
+    const ring = document.createElement('span');
+    ring.className = 'ring-pulse';
+    burst.appendChild(ring);
+
+    burst.style.transform = 'translate3d(' + x + 'px, ' + y + 'px, 0)';
+    burst.classList.remove('play');
+    void burst.offsetWidth;
+    burst.classList.add('play');
+    setTimeout(function () {
+      burst.classList.remove('play');
+      burst.innerHTML = '';
+    }, 800);
+  }
+
   window.addEventListener('mousemove', onMove, { passive: true });
+  window.addEventListener('mousedown', onDown);
   document.addEventListener('mouseover', onTarget, { passive: true });
   document.addEventListener('mouseleave', onLeave);
   document.addEventListener('mouseenter', onEnter);
