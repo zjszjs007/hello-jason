@@ -1593,10 +1593,13 @@ body.colophon-open { overflow: hidden; }
     </div>
     <div class="hero-visual reveal">
       <div class="hero-portrait">
-        <img class="hero-portrait-photo" src="assets/avatar.jpg"
-             alt="Jason Zhang" width="760" height="760" loading="eager" />
-        <div class="hero-portrait-hint" data-i18n="hero.portraitHint">独立 · 自由职业 · 天津</div>
-      </div>
+          <picture>
+            <source srcset="assets/avatar.webp" type="image/webp" />
+            <img class="hero-portrait-photo" src="assets/avatar.jpg"
+                 alt="Jason Zhang" width="1024" height="1024" loading="eager" fetchpriority="high" />
+          </picture>
+          <div class="hero-portrait-hint" data-i18n="hero.portraitHint">独立 · 自由职业 · 天津</div>
+        </div>
     </div>
   </div>
 </header>
@@ -1770,14 +1773,14 @@ body.colophon-open { overflow: hidden; }
         </div>
         <div class="project-body">
           <h3 class="project-title">Date-Lightly</h3>
-          <p class="project-desc" data-i18n="prj.p3Desc">轻量日期与邀请页面，用极小的前端体量做出可直接分享的日期卡片；通过 GitHub Pages 一键部署，适合个人与团队快速发布。</p>
+          <p class="project-desc" data-i18n="prj.p3Desc">多步骤约会规划应用：输入城市、区域、时间和关系阶段，实时生成完整的时间轴方案、预算估算和可直接发送的邀约文案。单页轻量前端，零后端依赖。</p>
         </div>
         <div class="project-footer">
           <div class="project-links">
             <a href="https://zjszjs007.github.io/Date-Lightly/" target="_blank" rel="noopener" aria-label="Online preview">Preview ↗</a>
             <a href="https://github.com/zjszjs007/Date-Lightly" target="_blank" rel="noopener" aria-label="GitHub">GitHub ↗</a>
           </div>
-          <span>TypeScript · GitHub Pages</span>
+          <span>TypeScript · 单页应用 · 零后端</span>
         </div>
       </article>
 
@@ -1844,9 +1847,9 @@ body.colophon-open { overflow: hidden; }
 
         <div class="wechat-card" aria-label="WeChat contact">
           <div class="wechat-qr-wrap">
-            <img class="wechat-qr" src="assets/wechat-qr.jpg"
+            <img class="wechat-qr" src="assets/wechat-qr.png"
                  alt="Jason Zhang 的微信二维码"
-                 width="76" height="76" loading="lazy" />
+                 width="200" height="200" loading="lazy" />
           </div>
           <div class="wechat-info">
             <div class="wechat-label" data-i18n="ct.wechatLabel">微信扫码加我</div>
@@ -2575,7 +2578,7 @@ window.addEventListener('load', () => {
     'prj.p2Badge': 'Web3 · 拍卖',
     'prj.p2Desc': '基于 Monad EVM 的密封竞价拍卖。5 轮 Commit-Reveal 让买家先上链价格哈希、后揭露原值，全程链上交易，从根本上消除竞价狙击。',
     'prj.p3Badge': 'Web · 前端',
-    'prj.p3Desc': '轻量日期与邀请页面，用极小的前端体量做出可直接分享的日期卡片；通过 GitHub Pages 一键部署，适合个人与团队快速发布。',
+    'prj.p3Desc': '多步骤约会规划应用：输入城市、区域、时间和关系阶段，实时生成完整的时间轴方案、预算估算和可直接发送的邀约文案。单页轻量前端，零后端依赖。',
     'prj.more': '更多作品见',
     'ct.eyebrow': '05 · 联系',
     'ct.title': '聊聊你的想法',
@@ -2664,7 +2667,7 @@ window.addEventListener('load', () => {
     'prj.p2Badge': 'Web3 · Auction',
     'prj.p2Desc': 'A sealed-bid auction on.Monad EVM. Over 5 Commit-Reveal rounds, buyers first commit a hash of their price, then reveal the original value — all on-chain, eliminating bid sniping at its root.',
     'prj.p3Badge': 'Web · Frontend',
-    'prj.p3Desc': 'A lightweight date &amp; invitation page. Tiny frontend footprint, shareable date cards, one-click deploy to GitHub Pages — ideal for individuals and teams shipping quickly.',
+    'prj.p3Desc': 'Multi-step dating planner: enter city, area, time and relationship stage, and it generates a full timeline, budget estimate and a ready-to-send invite in real time. Single-page lightweight frontend, no backend.',
     'prj.more': 'More work at',
     'ct.eyebrow': '05 · Contact',
     'ct.title': 'Tell me about your idea',
