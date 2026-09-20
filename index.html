@@ -1498,14 +1498,16 @@ body.colophon-open { overflow: hidden; }
 }
 
 /* Star burst: 从点击点向外迸射的小星光，颜色跟随主题（--text） */
-/* 主题差异化的星爆参数：半径 / 时长 / 颗粒尺寸 / 环起点 */
+/* 主题差异化的星爆参数：数量 / 半径 / 时长 / 颗粒尺寸 / 环起点 */
 :root {
+  --star-burst-count: 7;
   --star-burst-radius: 34px;
   --star-burst-duration: 700ms;
   --star-burst-particle-size: 6px;
   --star-burst-ring-start: 20px;
 }
 :root[data-theme="dark"] {
+  --star-burst-count: 9;
   --star-burst-radius: 40px;
   --star-burst-duration: 820ms;
   --star-burst-particle-size: 7px;
@@ -2271,7 +2273,7 @@ window.addEventListener('load', () => {
     }
   }
 
-  // 从 CSS 变量读取星爆参数（用于粒子散布 + 清理 timeout，与主题联动）
+  // 从 CSS 变量读取星爆参数（用于粒子散布 + 数量 + 清理 timeout，与主题联动）
   function readBurstParams() {
     const cs = getComputedStyle(document.documentElement);
     function num(name, fallback) {
@@ -2285,7 +2287,11 @@ window.addEventListener('load', () => {
     if (isFinite(durationMs)) {
       if (rawDur.includes('s') && !rawDur.includes('ms')) durationMs *= 1000;
     } else { durationMs = 700; }
+    // 粒子数量（整数、下限 3、上限 20，防误配置把动画压爆）
+    const rawCount = num('--star-burst-count', 7);
+    const count = Math.max(3, Math.min(20, Math.round(rawCount)));
     return {
+      count: count,
       radius: num('--star-burst-radius', 34),
       particleSize: num('--star-burst-particle-size', 6),
       durationMs: durationMs,
@@ -2309,16 +2315,16 @@ window.addEventListener('load', () => {
 
     burst.classList.toggle('on-accent', onAccent);
 
-    // 从主题 token 读参数：粒子散布半径、数量、时长
-    const { radius, durationMs } = readBurstParams();
+    // 从主题 token 读参数：数量、粒子散布半径、时长
+    const { count, radius, durationMs } = readBurstParams();
     const inner = radius * 0.65;   // 内圈基准
     const outer = radius;          // 外圈上限
 
-    // 粒子迸射：7 颗小星光 + 1 个圆环脉冲
+    // 粒子迸射：count 颗小星光 + 1 个圆环脉冲
     burst.innerHTML = '';
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < count; i++) {
       const p = document.createElement('i');
-      const angle = (i / 7) * Math.PI * 2 + Math.random() * 0.4;
+      const angle = (i / count) * Math.PI * 2 + Math.random() * 0.4;
       const dist = inner + Math.random() * (outer - inner);
       p.style.setProperty('--rot', (angle * 180 / Math.PI).toFixed(2) + 'deg');
       p.style.setProperty('--tx', (Math.cos(angle) * dist).toFixed(1) + 'px');
