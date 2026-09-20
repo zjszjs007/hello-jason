@@ -1437,67 +1437,47 @@ body.colophon-open { overflow: hidden; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 /* ============================================================
-   Custom cursor (GitHub-style): 圆点 + 快速追随圈
-   - 圆点紧贴鼠标（instant），实心深色
-   - 外圈慢半拍（lerp 缓动），只描边
-   - 进入交互元素时：圆点缩小、外圈放大、颜色跟 accent
+   Custom cursor (GitHub-style): 单个 GitHub Octocat 图标
+   - 只有一个 20x20 图标，紧贴鼠标
+   - 进入交互元素时轻微放大 + accent 色
    - 触屏 / reduced-motion 自动禁用，恢复默认光标
    ============================================================ */
-.cursor-dot,
-.cursor-ring {
+.cursor-icon {
   position: fixed;
   top: 0;
   left: 0;
+  width: 22px;
+  height: 22px;
+  margin-left: -11px;
+  margin-top: -11px;
   pointer-events: none;
   z-index: 10000;
-  border-radius: 50%;
-  will-change: transform;
+  color: #24292F;
   opacity: 0;
-  transition: opacity 0.3s ease, width 0.25s cubic-bezier(0.22, 1, 0.36, 1), height 0.25s cubic-bezier(0.22, 1, 0.36, 1), margin-left 0.25s cubic-bezier(0.22, 1, 0.36, 1), margin-top 0.25s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.25s ease, background-color 0.25s ease;
+  will-change: transform, opacity;
+  transition: opacity 0.25s ease, width 0.2s cubic-bezier(0.22, 1, 0.36, 1), height 0.2s cubic-bezier(0.22, 1, 0.36, 1), margin-left 0.2s cubic-bezier(0.22, 1, 0.36, 1), margin-top 0.2s cubic-bezier(0.22, 1, 0.36, 1), color 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.cursor-dot {
-  width: 6px;
-  height: 6px;
-  margin-left: -3px;
-  margin-top: -3px;
-  background: #24292F;
-  transition: opacity 0.3s ease, width 0.2s cubic-bezier(0.22, 1, 0.36, 1), height 0.2s cubic-bezier(0.22, 1, 0.36, 1), margin-left 0.2s cubic-bezier(0.22, 1, 0.36, 1), margin-top 0.2s cubic-bezier(0.22, 1, 0.36, 1), background-color 0.2s ease;
+.cursor-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  fill: currentColor;
 }
-.cursor-ring {
-  width: 32px;
-  height: 32px;
-  margin-left: -16px;
-  margin-top: -16px;
-  border: 1.5px solid rgba(36, 41, 47, 0.35);
+.cursor-icon.is-active { opacity: 1; }
+.cursor-icon.is-hover {
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+  margin-top: -14px;
+  color: var(--accent);
 }
-.cursor-dot.is-active,
-.cursor-ring.is-active { opacity: 1; }
-/* 悬停交互元素：点变小、圈变大 */
-.cursor-dot.is-hover {
-  width: 3px;
-  height: 3px;
-  margin-left: -1.5px;
-  margin-top: -1.5px;
-  background: var(--accent);
-}
-.cursor-ring.is-hover {
-  width: 44px;
-  height: 44px;
-  margin-left: -22px;
-  margin-top: -22px;
-  border-color: var(--accent);
-  background: rgba(91, 91, 214, 0.06);
-}
-:root[data-theme="dark"] .cursor-dot { background: #F0F0F0; }
-:root[data-theme="dark"] .cursor-ring { border-color: rgba(240, 240, 240, 0.4); }
-:root[data-theme="dark"] .cursor-dot.is-hover { background: #8B8BF0; }
-:root[data-theme="dark"] .cursor-ring.is-hover {
-  border-color: #8B8BF0;
-  background: rgba(139, 139, 240, 0.08);
-}
-/* 触屏 / 减少动效时隐藏，恢复默认光标 */
+:root[data-theme="dark"] .cursor-icon { color: #F0F0F0; }
+:root[data-theme="dark"] .cursor-icon.is-hover { color: #8B8BF0; }
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .cursor-dot, .cursor-ring { display: none; }
+  .cursor-icon { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1542,9 +1522,12 @@ body.colophon-open { overflow: hidden; }
 </head>
 <body>
 
-<!-- GitHub-style 自定义光标：圆点 + 外圈 -->
-<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
-<div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+<!-- GitHub 章鱼图标光标 -->
+<div class="cursor-icon" id="cursorIcon" aria-hidden="true">
+  <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GitHub">
+    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.28.68 0 1.36.09 2 .28 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+  </svg>
+</div>
 
 <!-- ============================================================
      NAVIGATION
@@ -2161,10 +2144,9 @@ window.addEventListener('load', () => {
 })();
 
 /* ============================================================
-   CUSTOM CURSOR (GitHub-style): 圆点 + 慢跟随外圈
-   - 圆点：紧贴鼠标（无缓动）
-   - 外圈：慢半拍（lerp 0.18）
-   - 悬停交互元素时：圆点缩小变 accent 色，外圈变大
+   CUSTOM CURSOR (GitHub-style): 单个 GitHub Octocat 图标
+   - 20px 图标紧贴鼠标（无 lerp）
+   - 悬停交互元素时：放大到 26px、变 accent 色
    - 只在有鼠标设备 + 未请求减少动效时启用；
      启用后隐藏系统默认光标（cursor: none）
    ============================================================ */
@@ -2173,36 +2155,20 @@ window.addEventListener('load', () => {
   const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
   if (reduce || !finePointer) return;
 
-  const dot = document.getElementById('cursorDot');
-  const ring = document.getElementById('cursorRing');
-  if (!dot || !ring) return;
+  const icon = document.getElementById('cursorIcon');
+  if (!icon) return;
 
   // 启用后隐藏系统默认光标
   document.documentElement.style.cursor = 'none';
 
-  let tx = window.innerWidth / 2;
-  let ty = window.innerHeight / 2;
-  let rx = tx, ry = ty;
-  let rafId = null;
   let hovering = false;
 
   function onMove(e) {
-    tx = e.clientX;
-    ty = e.clientY;
-    // 圆点直接跟随（无 lerp）
-    dot.style.transform = 'translate3d(' + (tx | 0) + 'px, ' + (ty | 0) + 'px, 0)';
-    dot.classList.add('is-active');
-    ring.classList.add('is-active');
-    if (!rafId) rafId = requestAnimationFrame(tick);
+    icon.style.transform = 'translate3d(' + (e.clientX | 0) + 'px, ' + (e.clientY | 0) + 'px, 0)';
+    icon.classList.add('is-active');
   }
-  function onEnter() {
-    dot.classList.add('is-active');
-    ring.classList.add('is-active');
-  }
-  function onLeave() {
-    dot.classList.remove('is-active');
-    ring.classList.remove('is-active');
-  }
+  function onEnter() { icon.classList.add('is-active'); }
+  function onLeave() { icon.classList.remove('is-active'); }
 
   const INTERACTIVE_SELECTOR = 'a, button, .project-card, .stat-card, .skill-category, .wechat-card, .contact-email, .social-link, .theme-toggle, [tabindex], input, textarea, select';
   function onTarget(e) {
@@ -2212,19 +2178,7 @@ window.addEventListener('load', () => {
     const shouldHover = !!hit;
     if (shouldHover !== hovering) {
       hovering = shouldHover;
-      dot.classList.toggle('is-hover', hovering);
-      ring.classList.toggle('is-hover', hovering);
-    }
-  }
-
-  function tick() {
-    rafId = null;
-    const lerp = 0.18;
-    rx += (tx - rx) * lerp;
-    ry += (ty - ry) * lerp;
-    ring.style.transform = 'translate3d(' + (rx | 0) + 'px, ' + (ry | 0) + 'px, 0)';
-    if (Math.abs(tx - rx) > 0.4 || Math.abs(ty - ry) > 0.4) {
-      rafId = requestAnimationFrame(tick);
+      icon.classList.toggle('is-hover', hovering);
     }
   }
 
