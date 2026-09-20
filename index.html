@@ -1436,6 +1436,56 @@ body.colophon-open { overflow: hidden; }
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
+/* ============================================================
+   Cursor glow — 跟随鼠标的柔光晕
+   ============================================================ */
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 480px;
+  margin-left: -240px;
+  margin-top: -240px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  background: radial-gradient(circle at center,
+    rgba(91, 91, 214, 0.22) 0%,
+    rgba(91, 91, 214, 0.10) 35%,
+    rgba(91, 91, 214, 0) 65%);
+  opacity: 0;
+  transition: opacity 0.5s ease, width 0.4s cubic-bezier(0.22, 1, 0.36, 1), height 0.4s cubic-bezier(0.22, 1, 0.36, 1), margin-left 0.4s cubic-bezier(0.22, 1, 0.36, 1), margin-top 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, width, height;
+}
+.cursor-glow.is-active { opacity: 1; }
+.cursor-glow.is-hover {
+  width: 640px;
+  height: 640px;
+  margin-left: -320px;
+  margin-top: -320px;
+  background: radial-gradient(circle at center,
+    rgba(91, 91, 214, 0.32) 0%,
+    rgba(91, 91, 214, 0.14) 40%,
+    rgba(91, 91, 214, 0) 70%);
+}
+:root[data-theme="dark"] .cursor-glow {
+  background: radial-gradient(circle at center,
+    rgba(139, 139, 240, 0.28) 0%,
+    rgba(139, 139, 240, 0.12) 35%,
+    rgba(139, 139, 240, 0) 65%);
+}
+:root[data-theme="dark"] .cursor-glow.is-hover {
+  background: radial-gradient(circle at center,
+    rgba(139, 139, 240, 0.42) 0%,
+    rgba(139, 139, 240, 0.18) 40%,
+    rgba(139, 139, 240, 0) 70%);
+}
+/* 只在指针设备（桌面鼠标）显示；触屏 / reduced-motion 时隐藏 */
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .cursor-glow { display: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
   html { scroll-behavior: auto; }
@@ -1477,6 +1527,9 @@ body.colophon-open { overflow: hidden; }
 </style>
 </head>
 <body>
+
+<!-- 鼠标跟随柔光晕 -->
+<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
 <!-- ============================================================
      NAVIGATION
@@ -2090,6 +2143,71 @@ window.addEventListener('load', () => {
       }, 1800);
     }, 600);
   });
+})();
+
+/* ============================================================
+   CURSOR GLOW: 跟随鼠标的柔光晕
+   - 只在使用鼠标设备 + 未请求减少动效时启用
+   - 双层缓动：外圈慢跟随（0.15 lerp），内圈紧追
+   - 悬停交互元素（a/button/project-card 等）时放大变亮
+   - 离开 window 时淡出
+   ============================================================ */
+(function () {
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (reduce || !finePointer) return;
+
+  const el = document.getElementById('cursorGlow');
+  if (!el) return;
+
+  let tx = window.innerWidth / 2;   // 目标 x
+  let ty = window.innerHeight / 2;  // 目标 y
+  let cx = tx, cy = ty;              // 当前（缓动）
+  let rafId = null;
+  let hovering = false;
+
+  function onMove(e) {
+    tx = e.clientX;
+    ty = e.clientY;
+    el.classList.add('is-active');
+    if (!rafId) rafId = requestAnimationFrame(tick);
+  }
+  function onEnter() { el.classList.add('is-active'); }
+  function onLeave() { el.classList.remove('is-active'); }
+
+  // 交互元素检测（用 closest 一次性判定）
+  const INTERACTIVE_SELECTOR = 'a, button, .project-card, .stat-card, .skill-category, .wechat-card, .contact-email, .social-link, .theme-toggle, [tabindex]';
+  function onTarget(e) {
+    const t = e.target;
+    if (!t || typeof t.closest !== 'function') return;
+    const hit = t.closest(INTERACTIVE_SELECTOR);
+    const shouldHover = !!hit;
+    if (shouldHover !== hovering) {
+      hovering = shouldHover;
+      el.classList.toggle('is-hover', hovering);
+    }
+  }
+
+  function tick() {
+    rafId = null;
+    const lerp = 0.14;  // 越接近 1 越跟手
+    cx += (tx - cx) * lerp;
+    cy += (ty - cy) * lerp;
+    // 位置吸附到整数像素避免抖动
+    el.style.transform = 'translate3d(' + (cx | 0) + 'px, ' + (cy | 0) + 'px, 0)';
+    // 未到位则继续
+    if (Math.abs(tx - cx) > 0.4 || Math.abs(ty - cy) > 0.4) {
+      rafId = requestAnimationFrame(tick);
+    }
+  }
+
+  window.addEventListener('mousemove', onMove, { passive: true });
+  document.addEventListener('mouseover', onTarget, { passive: true });
+  document.addEventListener('mouseleave', onLeave);
+  document.addEventListener('mouseenter', onEnter);
+
+  // 页面滚动 / resize 时，光标位置不变但需保证仍在画布内
+  window.addEventListener('scroll', onEnter, { passive: true });
 })();
 
 /* ============================================================
