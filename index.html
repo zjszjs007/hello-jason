@@ -1497,7 +1497,7 @@ body.colophon-open { overflow: hidden; }
   .cursor-icon { display: none; }
 }
 
-/* Star burst: 从点击点向外迸射的小星光 */
+/* Star burst: 从点击点向外迸射的小星光，颜色跟随主题（--text） */
 .star-burst {
   position: fixed;
   top: 0;
@@ -1506,6 +1506,7 @@ body.colophon-open { overflow: hidden; }
   height: 0;
   pointer-events: none;
   z-index: 9999;
+  color: var(--text);
 }
 .star-burst i {
   position: absolute;
@@ -1513,11 +1514,10 @@ body.colophon-open { overflow: hidden; }
   top: 0;
   width: 6px;
   height: 6px;
-  background: var(--accent);
+  background: currentColor;
   border-radius: 50% 0 50% 0;
   transform: rotate(45deg);
   box-shadow: 0 0 6px currentColor;
-  color: var(--accent);
   opacity: 0;
   will-change: transform, opacity;
 }
@@ -1538,7 +1538,7 @@ body.colophon-open { overflow: hidden; }
   margin-left: -10px;
   margin-top: -10px;
   border-radius: 50%;
-  border: 1.5px solid var(--accent);
+  border: 1.5px solid currentColor;
   opacity: 0;
   will-change: transform, opacity;
 }
@@ -1546,11 +1546,11 @@ body.colophon-open { overflow: hidden; }
   animation: starRingPulse 0.6s ease-out forwards;
 }
 @keyframes starRingPulse {
-  0%   { opacity: 0.9; transform: scale(0.2); }
+  0%   { opacity: 0.85; transform: scale(0.2); }
   100% { opacity: 0; transform: scale(3); }
 }
-:root[data-theme="dark"] .star-burst i { color: #8B8BF0; background: #8B8BF0; }
-:root[data-theme="dark"] .star-burst .ring-pulse { border-color: #8B8BF0; }
+/* 点击在交互元素上时，粒子与光标一起切成 accent，形成"点了 accent 目标"的呼应 */
+.star-burst.on-accent { color: var(--accent); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -2259,15 +2259,21 @@ window.addEventListener('load', () => {
   }
 
   // 点击特效：在点击位置生成星爆 + 星形图标脉冲
+  // 点击落在交互元素上 → burst 走 accent 色，与光标 hover 呼应
+  // 点击落在正文/背景上 → burst 走 --text 主题色，融合背景
   function onDown(e) {
     if (!burst) return;
     const x = e.clientX | 0, y = e.clientY | 0;
+    const target = e.target;
+    const onAccent = !!(target && target.closest && target.closest(INTERACTIVE_SELECTOR));
+
     // 星形图标缩放脉冲
     icon.classList.remove('is-clicking');
-    // 强制 reflow 触发动画重播
     void icon.offsetWidth;
     icon.classList.add('is-clicking');
     setTimeout(function () { icon.classList.remove('is-clicking'); }, 420);
+
+    burst.classList.toggle('on-accent', onAccent);
 
     // 粒子迸射：6 颗小星光 + 1 个圆环脉冲
     burst.innerHTML = '';
