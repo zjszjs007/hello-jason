@@ -695,17 +695,6 @@ h2.section-title {
   display: grid;
   place-items: center;
 }
-.project-cover-placeholder {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-  color: var(--text-muted);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  background:
-    linear-gradient(135deg, var(--surface-alt) 0%, #EEEEE9 100%);
-}
 .project-cover-image {
   position: absolute;
   inset: 0;
@@ -718,30 +707,6 @@ h2.section-title {
 }
 .project-card:hover .project-cover-image {
   transform: scale(1.03);
-}
-.project-card:nth-child(1) .project-cover-placeholder {
-  background: linear-gradient(135deg, #EEEEFB 0%, #F4E9FB 100%);
-}
-.project-card:nth-child(2) .project-cover-placeholder {
-  background: linear-gradient(135deg, #E8EEFB 0%, #E9F4FB 100%);
-}
-.project-card:nth-child(3) .project-cover-placeholder {
-  background: linear-gradient(135deg, #F4EEE8 0%, #FBEEE9 100%);
-}
-.project-card:nth-child(4) .project-cover-placeholder {
-  background: linear-gradient(135deg, #EEEEFB 0%, #EEF7F0 100%);
-}
-:root[data-theme="dark"] .project-card:nth-child(1) .project-cover-placeholder {
-  background: linear-gradient(135deg, #1F1F2E 0%, #2A1F36 100%);
-}
-:root[data-theme="dark"] .project-card:nth-child(2) .project-cover-placeholder {
-  background: linear-gradient(135deg, #1F2536 0%, #1F3630 100%);
-}
-:root[data-theme="dark"] .project-card:nth-child(3) .project-cover-placeholder {
-  background: linear-gradient(135deg, #2E241F 0%, #36301F 100%);
-}
-:root[data-theme="dark"] .project-card:nth-child(4) .project-cover-placeholder {
-  background: linear-gradient(135deg, #1F2333 0%, #1F3328 100%);
 }
 :root[data-theme="dark"] .project-badge {
   background: rgba(20, 20, 26, 0.9);
@@ -1773,14 +1738,14 @@ body.colophon-open { overflow: hidden; }
         </div>
         <div class="project-body">
           <h3 class="project-title">Date-Lightly</h3>
-          <p class="project-desc" data-i18n="prj.p3Desc">多步骤约会规划应用：输入城市、区域、时间和关系阶段，实时生成完整的时间轴方案、预算估算和可直接发送的邀约文案。单页轻量前端，零后端依赖。</p>
+          <p class="project-desc" data-i18n="prj.p3Desc">多步骤约会规划应用：输入城市、区域、时间和关系阶段，实时生成完整的时间轴方案、预算估算和可直接发送的邀约文案。</p>
         </div>
         <div class="project-footer">
           <div class="project-links">
             <a href="https://zjszjs007.github.io/Date-Lightly/" target="_blank" rel="noopener" aria-label="Online preview">Preview ↗</a>
             <a href="https://github.com/zjszjs007/Date-Lightly" target="_blank" rel="noopener" aria-label="GitHub">GitHub ↗</a>
           </div>
-          <span>TypeScript · 单页应用 · 零后端</span>
+          <span>TypeScript · 单页应用</span>
         </div>
       </article>
 
@@ -2578,7 +2543,7 @@ window.addEventListener('load', () => {
     'prj.p2Badge': 'Web3 · 拍卖',
     'prj.p2Desc': '基于 Monad EVM 的密封竞价拍卖。5 轮 Commit-Reveal 让买家先上链价格哈希、后揭露原值，全程链上交易，从根本上消除竞价狙击。',
     'prj.p3Badge': 'Web · 前端',
-    'prj.p3Desc': '多步骤约会规划应用：输入城市、区域、时间和关系阶段，实时生成完整的时间轴方案、预算估算和可直接发送的邀约文案。单页轻量前端，零后端依赖。',
+    'prj.p3Desc': '多步骤约会规划应用：输入城市、区域、时间和关系阶段，实时生成完整的时间轴方案、预算估算和可直接发送的邀约文案。',
     'prj.more': '更多作品见',
     'ct.eyebrow': '05 · 联系',
     'ct.title': '聊聊你的想法',
@@ -2667,7 +2632,7 @@ window.addEventListener('load', () => {
     'prj.p2Badge': 'Web3 · Auction',
     'prj.p2Desc': 'A sealed-bid auction on.Monad EVM. Over 5 Commit-Reveal rounds, buyers first commit a hash of their price, then reveal the original value — all on-chain, eliminating bid sniping at its root.',
     'prj.p3Badge': 'Web · Frontend',
-    'prj.p3Desc': 'Multi-step dating planner: enter city, area, time and relationship stage, and it generates a full timeline, budget estimate and a ready-to-send invite in real time. Single-page lightweight frontend, no backend.',
+    'prj.p3Desc': 'Multi-step dating planner: enter city, area, time and relationship stage, and it generates a full timeline, budget estimate and a ready-to-send invite in real time.',
     'prj.more': 'More work at',
     'ct.eyebrow': '05 · Contact',
     'ct.title': 'Tell me about your idea',
