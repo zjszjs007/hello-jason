@@ -12,12 +12,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
 <script>
-/* Apply theme before first paint to avoid flash */
+/* Apply theme before first paint to avoid flash (default: dark) */
 (function () {
   var stored = null;
   try { stored = localStorage.getItem('theme'); } catch (e) {}
-  var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-  var theme = stored || (prefersDark ? 'dark' : 'light');
+  // 用户显式选择优先；未选择时默认暗色（不再跟随系统）
+  var theme = stored || 'dark';
   if (theme === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
 })();
 
@@ -2367,7 +2367,6 @@ window.addEventListener('load', () => {
   if (!ctx) return;
 
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const darkMedia = window.matchMedia('(prefers-color-scheme: dark)');
 
   // 技术栈文字池（前端 + 后端 + 数据 + 基础设施，重复几次填充球面）
   const TECH = [
@@ -2659,7 +2658,8 @@ window.addEventListener('load', () => {
     }
   });
 
-  // 跟随系统切换（用户未手动选择过时）
+  // 跟随系统切换（仅在用户从未手动选择过时；当前默认暗色，故仅在系统亮色时切亮）
+  // 用户手动切换过一次后 localStorage 会写入，此后不再跟随系统
   if (window.matchMedia) {
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     mq.addEventListener && mq.addEventListener('change', (e) => {
